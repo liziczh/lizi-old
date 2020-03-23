@@ -1,0 +1,693 @@
+<section class="card" xmlns="http://www.w3.org/1999/html" style="background:none;border:0;">
+   <div class="card-header" style="background:none;border:0;">
+      <div class="col-md-4  pull-right mt-2">
+         <div class="form-group pull-right">
+
+         </div>
+      </div>
+      <span class="cat__core__title"><strong>企业列表</strong></span>
+      <small class="text-muted"></small>
+
+   </div>
+   <div class="mt-3" id="analysisBox">
+      <div class="mt-5">
+         <div style="margin-bottom:8px">
+            <eui-linkbutton iconCls="icon-add" (click)="openAddCompany(COMPANY_TEMPLATE)">添加企业</eui-linkbutton>
+            <eui-searchbox #sb style="width:200px;float: right;margin-left: 10px;"
+                           placeholder="输入企业邮箱、名称搜索"
+                           (search)="onSearch($event)">
+               <eui-addon>
+                  <span *ngIf="sb.value !== null" class="textbox-icon icon-clear" title="Clear value"
+                        (click)="sb.value = null"></span>
+               </eui-addon>
+            </eui-searchbox>
+            <eui-combobox
+               style="float:right;margin-left: 10px;" placeholder="请选择客户" [editable]="false"
+               [data]="homeStatusData" [(ngModel)]="homeStatusValue"
+               (valueChange)="onValueChange($event)">
+            </eui-combobox>
+            <eui-combobox
+               style="float:right;margin-left: 10px;" placeholder="请选择销售人" [editable]="false"
+               [data]="homeSaleData" [(ngModel)]="homeSaleValue"
+               (valueChange)="onValueChange($event)">
+            </eui-combobox>
+            <eui-combobox
+               style="float:right;margin-left: 10px;" placeholder="请选择产品" [editable]="false"
+               [data]="homeProductData" [(ngModel)]="homeProductValue"
+               (valueChange)="onValueChange($event)">
+            </eui-combobox>
+         </div>
+         <eui-datagrid
+            [pagination]="true"
+            [lazy]="true"
+            [data]="companyTableData"
+            [total]="companyTableDataTotalSize"
+            [pageNumber]="companyTablePageNum"
+            [pageSize]="companyTableLimit"
+            [loading]="loading"
+            style="clear: both;"
+            (pageChange)="onPageChange($event)">
+            <eui-grid-column align="center" width="5%" title="编号" cellCss="datagrid-td-rownumber">
+               <ng-template euiCellTemplate let-rowIndex="rowIndex" class="font-size-6">
+                  <div class="item font-size-6">
+                     {{rowIndex + 1}}
+                  </div>
+               </ng-template>
+            </eui-grid-column>
+            <eui-grid-column field="companyName" title="企业名称" width="20%">
+               <ng-template euiCellTemplate let-row>
+                  <div class="item font-size-6" [title]="row.name">
+                     {{row.name}}
+                  </div>
+               </ng-template>
+            </eui-grid-column>
+            <eui-grid-column field="sale" title="销售" width="10%">
+               <ng-template euiCellTemplate let-row>
+                  <div class="item font-size-6">
+                     {{row.saleName}}
+                  </div>
+               </ng-template>
+            </eui-grid-column>
+            <eui-grid-column field="createTime" title="创建时间" align="center" width="10%">
+               <ng-template euiCellTemplate let-row>
+                  <div class="item font-size-6">
+                     <div [title]="row.createTime">{{row.createTime|dateCommonPipe:'yyyy-MM-dd'}}</div>
+                  </div>
+               </ng-template>
+            </eui-grid-column>
+            <eui-grid-column field="status" title="类型" align="center" width="6%">
+               <ng-template euiCellTemplate let-row>
+                  <div class="item font-size-6">
+                     <div *ngIf="row.isTrial === 0" style="color: green;">正式</div>
+                     <div *ngIf="row.isTrial === 1" style="color: red;">试用</div>
+                  </div>
+               </ng-template>
+            </eui-grid-column>
+            <eui-grid-column field="productNum" align="center" title="产品数" width="12%">
+               <ng-template euiCellTemplate let-row>
+                  <div class="item font-size-6" *ngIf="row.productNum === 0">
+                     {{row.productNum}}
+                  </div>
+                  <div class="item font-size-6" *ngIf="row.productNum >0">
+                     {{row.productNum}}
+                     [<a href="javascript: void(0);" style="color: blue;"
+                         (click)="openProductEditModal(PRODUCT_EDIT_TEMPLATE,row)">列表</a>]
+                     [<a href="javascript: void(0);" style="color: red;"
+                         (click)="openProductModal(PRODUCT_TEMPLATE,row)">延期</a>]
+                  </div>
+               </ng-template>
+            </eui-grid-column>
+            <eui-grid-column field="accountNum" align="center" title="账号数" width="10%">
+               <ng-template euiCellTemplate let-row>
+                  <div class="item font-size-6" *ngIf="row.accountNum === 0">
+                     {{row.accountNum}}
+                  </div>
+                  <div class="item font-size-6" *ngIf="row.accountNum >0">
+                     {{row.accountNum}}
+                     [<a routerLink="/admin/business/users" [queryParams]="{companyID:row.sid,companyName:row.name}"
+                         style="color: blue;">列表</a>]
+                  </div>
+               </ng-template>
+            </eui-grid-column>
+            <eui-grid-column title="操作">
+               <ng-template euiCellTemplate let-row>
+                  <div class="item">
+                     <a class="mr-2" title="修改企业"
+                        href="javascript: void(0);" (click)="openEditCompany(COMPANY_TEMPLATE,row.id)"><i
+                        class="icmn-pencil2"></i> </a>
+                     <a class="mr-2" title="购买产品"
+                        href="javascript: void(0);" (click)="openProductBuyModal(PRODUCT_BUY_TEMPLATE,row)">
+                        <!--<i class="icmn-cart"></i>-->
+                        购买产品
+                     </a>
+                     <a class="mr-2" title="批量添加用户"
+                        href="javascript: void(0);" (click)="openAddUsers(USER_TEMPLATE,row.id,row.productNum)">
+                        <!--<i class="icmn-user-plus"> </i>-->
+                        添加用户
+                     </a>
+                     <a *ngIf="row.companyStatus === 0" class="mr-2" title="禁用"
+                        href="javascript: void(0);" (click)="openDisabledModal(SINGLE_COMPANY_TEMPLATE,row.id)">禁用
+                     </a>
+                     <a *ngIf="row.companyStatus === 2" class="mr-2" title="解禁"
+                        href="javascript: void(0);" (click)="openUnDisabledModal(SINGLE_COMPANY_TEMPLATE,row.id)">解禁
+                     </a>
+                     <a class="mr-2" title="删除"
+                        href="javascript: void(0);" (click)="openDeleteModal(SINGLE_COMPANY_TEMPLATE,row.id)">删除
+                     </a>
+                  </div>
+               </ng-template>
+            </eui-grid-column>
+         </eui-datagrid>
+      </div>
+
+   </div>
+   <!--企业编辑-->
+   <ng-template #COMPANY_TEMPLATE>
+
+         <div class="modal-header">
+            <h5 class="modal-title">{{ifAdd?'新增':'修改'}}企业</h5>
+            <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+               <span aria-hidden="true">&times;</span>
+            </button>
+         </div>
+         <div class="modal-body">
+            <form novalidate [formGroup]="companyForm">
+               <div class="form-label">
+                  <label [for]="name" class="" align="left">企业名称<span class="red-color">*</span></label>
+                  <eui-textbox #name maxlength="30" style="width: 18em;" formControlName="name"></eui-textbox>
+                  <label class="error" *ngIf="companyForm.get('name').hasError('required')">Required.</label>
+               </div>
+               <div class="form-label" formArrayName="emails" *ngFor="let email of emails.controls; index as i">
+                  <label class="textbox-label textbox-label-right " [for]="emails" align="left">邮箱后缀{{emails.length ===
+                     1 ? '': (i+1)}}<span class="red-color">*</span></label>
+                  <eui-textbox #{{i}} maxlength="30" style="width: 18em;" formControlName="{{i}}"
+                               (keydown.enter)="addEmail(i)">
+                     <eui-addon align="left">
+                        <span class="input-group-addon " style="font-weight: bolder;">@</span>
+                     </eui-addon>
+                     <eui-addon>
+                        <span *ngIf="(i+1) === emails.length" (click)="addEmail()" class="textbox-icon icon-add"></span>
+                        <span *ngIf="emails.length > 1" (click)="removeEmail(i)"
+                              class="textbox-icon icon-remove"></span>
+                     </eui-addon>
+                  </eui-textbox>
+                  <label class="error" *ngIf="companyForm.get('emails').hasError('required',[i])">Required.</label>
+               </div>
+               <div class="form-label">
+                  <label [for]="saleId" class="" align="left">销售人员<span class="red-color">*</span></label>
+                  <eui-combobox #saleId style="width: 18em;" [editable]="false" formControlName="saleId"
+                                   [value]="companySaleValue"
+                                   [data]="companySaleData"></eui-combobox>
+               </div>
+               <div class="form-label">
+                  <label [for]="isTrial" class="" align="left">试用企业<span class="red-color">*</span></label>
+                  <eui-radiobutton #isTrial formControlName="isTrial" [value]="1" [inputId]="1"
+                                   name="isTrial"></eui-radiobutton>
+                  <label style="width: 50px;" [attr.for]="1">试用</label>
+                  <eui-radiobutton #isTrial formControlName="isTrial" [value]="0" [inputId]="0"
+                                   name="isTrial"></eui-radiobutton>
+                  <label style="width: 50px;" [attr.for]="0">正式</label>
+               </div>
+               <div class="form-label">
+                  <label [for]="companyType" class="" align="left">企业类型<span class="red-color">*</span></label>
+                  <eui-radiobutton #companyType formControlName="companyType" [value]="0" [inputId]="0"
+                                   name="companyType"></eui-radiobutton>
+                  <label style="width: 50px;" [attr.for]="0">互联网</label>
+                  <eui-radiobutton #companyType formControlName="companyType" [value]="1" [inputId]="1"
+                                   name="companyType"></eui-radiobutton>
+                  <label style="width: 50px;" [attr.for]="1">资本</label>
+               </div>
+               <div class="form-label">
+                  <label [for]="description" class="" align="left">企业描述</label>
+                  <eui-textbox #description style="width: 18em;height:45px;" formControlName="description"
+                               [invalid]="companyForm.get('description').invalid"
+                               [multiline]="true"></eui-textbox>
+               </div>
+               <div class="form-label">
+                  <label [for]="loginType" class="" align="left">登录类型<span class="red-color">*</span></label>
+                  <eui-radiobutton #loginType formControlName="loginType" name="loginType" [value]="0"
+                                   [inputId]="0"></eui-radiobutton>
+                  <label style="width: 50px;" [attr.for]="0">微信</label>
+                  <eui-radiobutton #loginType formControlName="loginType" name="loginType" [value]="1"
+                                   [inputId]="1"></eui-radiobutton>
+                  <label style="width: 50px;" [attr.for]="1">英文</label>
+                  <eui-radiobutton #loginType formControlName="loginType" name="loginType" [value]="2"
+                                   [inputId]="2"></eui-radiobutton>
+                  <label [attr.for]="2">微信/英文</label>
+               </div>
+            </form>
+         </div>
+         <div class="modal-footer">
+            <button class="btn  btn-outline-success mr-2 mb-2 btn-sm"
+                    [disabled]="companyForm.invalid"
+                    (click)="ifAdd ? submitAddCompanyForm(): submitEditCompanyForm()"
+                    type="button">确定
+            </button>
+            <button class="btn  btn-dark mr-2 mb-2 btn-sm" (click)="modalRef.hide()"
+                    type="button">关闭
+            </button>
+         </div>
+   </ng-template>
+   <!--企业禁用删除解禁模板-->
+   <ng-template #SINGLE_COMPANY_TEMPLATE>
+      <form>
+         <div class="modal-header">
+            <h5 class="modal-title">{{singleModal.title}}</h5>
+
+            <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+               <span aria-hidden="true">&times;</span>
+            </button>
+         </div>
+         <div class="modal-body">
+            <div class="modal-body">
+               <h5 class="modal-body" [innerHTML]="singleModal.content | Html"></h5>
+               <h6 class="modal-body has-error" style="color: red;" [innerHTML]="singleModal.point"></h6>
+            </div>
+         </div>
+         <div class="modal-footer">
+            <button class="btn  btn-outline-success mr-2 mb-2 btn-sm" (click)="singleSubmitCompany(singleModal.click)"
+                    type="button">确定
+            </button>
+            <button class="btn  btn-dark mr-2 mb-2 btn-sm" (click)="modalRef.hide()"
+                    type="button">关闭
+            </button>
+         </div>
+      </form>
+   </ng-template>
+   <!--产品列表模板-->
+   <ng-template #PRODUCT_TEMPLATE id="productTemplate">
+      <div class="modal-body">
+         <div class="modal-body">
+            <h5 class="text-black"><strong>{{productTemplateCompany.name}} 产品批量延期：</strong></h5>
+            <div class="mt-4 ml-2">
+               <div>
+                  <label>
+                     <eui-checkbox [checked]="productTemplateChecked" type="checkbox"
+                                   (click)="selectAllProduct()"></eui-checkbox>
+                     全选
+                  </label>
+                  <div class="float-right">到期时间</div>
+               </div>
+               <div *ngFor="let product of productTemplateProductList;index as i">
+                  <eui-checkbox [checked]="product.checked" (click)="changeCheckedAll(product.id)"></eui-checkbox>
+                  {{product.productName}}
+                  <div class="ml-2 float-right">{{product.expireTime | dateCommonPipe:'yyyy-MM-dd'}}</div>
+
+                  <div *ngIf="product.isTrial === 0" class="float-right"><span class="badge badge-success">正式</span>
+                  </div>
+                  <div *ngIf="product.isTrial === 1" class="float-right"><span class="badge badge-danger">试用</span>
+                  </div>
+               </div>
+
+               <label class="mt-3">激活时间：
+                  <eui-datebox [editable]="false" [(ngModel)]="productTemplateStartDate"
+                               format="yyyy-MM-dd"></eui-datebox>
+               </label>
+               <label>到期时间：
+                  <eui-datebox [editable]="false" [(ngModel)]="productTemplateExpireDate"
+                               format="yyyy-MM-dd"></eui-datebox>
+               </label>
+
+            </div>
+         </div>
+      </div>
+      <div class="modal-footer">
+         <button class="btn  btn-outline-success mr-2 mb-2 btn-sm" (click)="commitProductTemplate()"
+                 type="button">保存
+         </button>
+         <button class="btn  btn-dark mr-2 mb-2 btn-sm" (click)="modalRef.hide()"
+                 type="button">关闭
+         </button>
+      </div>
+   </ng-template>
+   <!--产品修改模板-->
+   <ng-template #PRODUCT_EDIT_TEMPLATE id="productEditTemplate">
+      <div class="modal-body">
+         <div class="modal-body">
+            <h5 class="text-black"><strong>{{productEditTemplateCompany.name}} 企业已经购买的产品如下：（修改流程）</strong></h5>
+            <div class="mt-4 ml-2">
+               <label>step1. 批量选择产品修改：
+                  <eui-combobox #combo style="width:500px"
+                                [(ngModel)]="productEditTemplateValues"
+                                [data]="productEditTemplateData"
+                                [editable]="false"
+                                (valueChange)="changeProductEditDataValue($event)"
+                                [multiple]="true"
+                                [textFormatter]="formatText"></eui-combobox>
+               </label>
+               <label class="ml-2">全选：
+                  <eui-checkbox [(ngModel)]="productEditTemplateSelectedAll"
+                                (checkedChange)="batchEditProducts($event)"></eui-checkbox>
+               </label>
+               <br/>
+               <label>step2. 批量修改激活时间：
+                  <eui-datebox [editable]="false" [(ngModel)]="productEditTemplateActivateTime"
+                               (valueChange)="batchEditActivateTime($event)" format="yyyy-MM-dd"></eui-datebox>
+               </label>
+               <label class="ml-2">到期时间：
+                  <eui-datebox [editable]="false" [(ngModel)]="productEditTemplateExpireTime"
+                               (valueChange)="batchEditExpireTime($event)"
+                               format="yyyy-MM-dd"></eui-datebox>
+               </label>
+               <label class="ml-2">开通账户数：
+                  <eui-numberbox [min]="0" [spinners]="true" [(ngModel)]="productEditTemplateAccountNum"
+                                 (valueChange)="$event.currentValue?batchEditAccountNum($event):''"></eui-numberbox>
+               </label>
+               <label class="ml-2">试用：
+                  <eui-checkbox [(ngModel)]="productEditTemplateIsTrial"
+                                (checkedChange)="batchEditIsTrial($event)"></eui-checkbox>
+               </label>
+               <!--<label class="ml-2" hidden="hidden">发送邮件：-->
+               <!--<eui-checkbox [(ngModel)]="productEditTemplateIfSend"-->
+               <!--(checkedChange)="batchEditIfSend($event)"></eui-checkbox>-->
+               <!--</label>-->
+               <eui-accordion [multiple]="true" [animate]="true">
+                  <eui-accordion-panel [selected]="false" *ngFor="let product of data ;index as i"
+                                       [title]="product.productName" (click)="showTree(i)">
+                     <eui-panel-header>
+                        <div class="panel-title panel-with-icon float-left width-200">{{product.productName}}</div>
+                        <div class="float-left ml-2  width-300">到期时间：{{product.expireTime|dateCommonPipe:'yyyy-MM-dd'}} <span
+                           *ngIf="product.expireTime && ((product.expireTime | dateCommonPipe : 'yyyyMMddHHmmss') < (dateNow | dateCommonPipe : 'yyyyMMddHHmmss'))"
+                           style="color: red;">(过期)</span></div>
+                        <div *ngIf="product.isTrial" class="float-left ml-2  width-100" style="color:red ;">试用</div>
+                        <div *ngIf="!product.isTrial" class="float-left ml-2  width-100" style="color:green ;">正式</div>
+                        <div class="float-left ml-2  width-200">开通账户数：{{product.accountNum}}
+                        </div>
+                        <div class="float-left ml-2  width-200">可用账户数：{{product.accountNum-product.accountUsedNum}}
+                        </div>
+                     </eui-panel-header>
+
+                     <div class="mt-3 mb-2 ml-5">
+                        <div>
+                           <label>激活时间<span class="label-danger">*</span>：
+                              <eui-datebox [editable]="false" [(ngModel)]="product.activateTime"
+                                           format="yyyy-MM-dd"></eui-datebox>
+                           </label>
+                        </div>
+                        <div>
+                           <label>到期时间<span class="label-danger">*</span>：
+                              <eui-datebox [editable]="false" [(ngModel)]="product.expireTime"
+                                           format="yyyy-MM-dd"></eui-datebox>
+                           </label>
+                           <span
+                              *ngIf="product.expireTime && ((product.expireTime | dateCommonPipe : 'yyyyMMddHHmmss') <= (product.activateTime | dateCommonPipe : 'yyyyMMddHHmmss'))"
+                              style="color: red;">(产品到期时间必须大于激活时间！)</span>
+                        </div>
+                        <div>
+                           <label>试用：
+                              <eui-checkbox [(ngModel)]="product.isTrial"></eui-checkbox>
+                           </label>
+                        </div>
+                        <div>
+                           <label hidden="hidden">发送邮件：
+                              <eui-checkbox [(ngModel)]="product.ifSendEmail"></eui-checkbox>
+                           </label>
+                        </div>
+                        <div>
+                           <label>数据时间限制：
+                              <eui-checkbox [(ngModel)]="product.dataPeriod"
+                                            (checkedChange)="EditIsTrial($event,product)"></eui-checkbox>
+                           </label>
+                        </div>
+                        <div *ngIf="product.dataPeriod">
+                           <label>数据开始时间<span class="label-danger">*</span>：
+                              <eui-datebox [editable]="false" [(ngModel)]="product.dataStartTime"
+                                           format="yyyy-MM-dd"></eui-datebox>
+                           </label>
+                        </div>
+                        <div *ngIf="product.dataPeriod">
+                           <label>数据结束时间<span class="label-danger">*</span>：
+                              <eui-datebox [editable]="false" [(ngModel)]="product.dataEndTime"
+                                           format="yyyy-MM-dd"></eui-datebox>
+                           </label>
+                           <span
+                              *ngIf="product.dataPeriod && product.dataEndTime && ((product.dataEndTime | dateCommonPipe : 'yyyyMMddHHmmss') <= (product.dataStartTime | dateCommonPipe : 'yyyyMMddHHmmss'))"
+                              style="color: red;">(数据限制结束时间必须大于开始时间！)</span>
+                        </div>
+                        <div>
+                           <label>开通账户数<span class="label-danger">*</span>：
+                              <eui-numberbox [min]="product.accountUsedNum? product.accountUsedNum : 0"
+                                             [spinners]="true" [(ngModel)]="product.accountNum"></eui-numberbox>
+                           </label>
+
+                        </div>
+                        <div>
+                           <label>已使用账号：
+                              <eui-numberbox [min]="0" [disabled]="false" [spinners]="false" [editable]="false"
+                                             [(ngModel)]="product.accountUsedNum"></eui-numberbox>
+                           </label>
+                        </div>
+                        <div>
+                           <label>产品模块：
+                              <eui-tree
+                                 [data]="data[i].modules" [checkbox]="true"
+                                        (checkChange)="product.checkedModuleNodes=$event"
+                              ></eui-tree>
+                           </label>
+                        </div>
+                        <div>
+                           <label>标签模块：
+                              <eui-tree
+                                 [data]="data[i].tags" [checkbox]="true"
+                                        (checkChange)="product.checkedTagNodes=$event"
+                              ></eui-tree>
+                           </label>
+                        </div>
+                        <label class="red-color mt-2">*&nbsp;修改公司的产品模块或标签将重置该公司下所有用户的产品模块或标签信息</label>
+                     </div>
+                  </eui-accordion-panel>
+               </eui-accordion>
+
+            </div>
+         </div>
+      </div>
+      <div class="modal-footer">
+         <button class="btn  btn-outline-success mr-2 mb-2 btn-sm" (click)="commitEditProductTemplate()"
+                 type="button">保存
+         </button>
+         <button class="btn  btn-dark mr-2 mb-2 btn-sm" (click)="modalRef.hide()"
+                 type="button">关闭
+         </button>
+      </div>
+   </ng-template>
+   <!--产品购买模板-->
+   <ng-template #PRODUCT_BUY_TEMPLATE id="productBuyTemplate">
+      <div class="modal-body">
+         <div class="modal-body">
+            <h5 class="text-black"><strong>{{productBuyTemplateCompany.name}} 购买产品：（购买流程）</strong></h5>
+            <div class="mt-4 ml-2">
+               <label>step1. 批量选择产品购买：
+                  <eui-combobox #combo style="width:500px"
+                                [(ngModel)]="productBuyTemplateValues"
+                                [data]="productBuyTemplateData"
+                                [multiple]="true"
+                                [editable]="false"
+                                (valueChange)="changeProductDataValue($event)"
+                                [textFormatter]="formatText"></eui-combobox>
+               </label>
+               <label class="ml-2">全选：
+                  <eui-checkbox [(ngModel)]="productBuyTemplateSelectedAll"
+                                (checkedChange)="batchBuyProducts($event)"></eui-checkbox>
+               </label>
+               <br/>
+
+               <label class="">step2. 批量设置激活时间：
+                  <eui-datebox [(ngModel)]="productEditTemplateActivateTime" [editable]="false"
+                               (valueChange)="batchEditActivateTime($event)" format="yyyy-MM-dd"></eui-datebox>
+               </label>
+               <label class="ml-2">到期时间：
+                  <eui-datebox [(ngModel)]="productEditTemplateExpireTime" [editable]="false"
+                               (valueChange)="batchEditExpireTime($event)"
+                               format="yyyy-MM-dd"></eui-datebox>
+               </label>
+               <label class="ml-2">开通账户数：
+                  <eui-numberbox [min]="0" [spinners]="true" [(ngModel)]="productEditTemplateAccountNum"
+                                 (valueChange)="$event.currentValue?batchEditAccountNum($event):''"></eui-numberbox>
+               </label>
+               <label class="ml-2">试用：
+                  <eui-checkbox [(ngModel)]="productEditTemplateIsTrial"
+                                (checkedChange)="batchEditIsTrial($event)"></eui-checkbox>
+               </label>
+               <!--<label class="ml-2"  hidden="hidden">发送邮件：-->
+               <!--<eui-checkbox [(ngModel)]="productEditTemplateIfSend"-->
+               <!--(checkedChange)="batchEditIfSend($event)"></eui-checkbox>-->
+               <!--</label>-->
+
+
+               <eui-accordion [multiple]="true" [animate]="true">
+                  <eui-accordion-panel [selected]="false" *ngFor="let product of data ;index as i"
+                                       [title]="product.productName" (click)="showTree(i)">
+                     <eui-panel-header>
+
+                        <div class="panel-title panel-with-icon float-left width-200">{{product.productName}}</div>
+                        <div class="float-left ml-2  width-300">到期时间：{{product.expireTime|dateCommonPipe:'yyyy-MM-dd'}} <span
+                           *ngIf="product.expireTime && ((product.expireTime | dateCommonPipe : 'yyyyMMddHHmmss') < (dateNow | dateCommonPipe : 'yyyyMMddHHmmss'))"
+                           style="color: red;">(过期)</span></div>
+                        <div *ngIf="product.isTrial" class="float-left ml-2  width-100" style="color:red ;">试用</div>
+                        <div *ngIf="!product.isTrial" class="float-left ml-2  width-100" style="color:green ;">正式</div>
+                        <div class="float-left ml-2  width-200">开通账户数：{{product.accountNum}}
+                        </div>
+                        <div class="float-left ml-2  width-200">可用账户数：{{product.accountNum - product.accountUsedNum}}
+                        </div>
+                     </eui-panel-header>
+
+                     <div class="mt-3 mb-2 ml-5">
+                        <div>
+                           <label>激活时间<span class="label-danger">*</span>：
+                              <eui-datebox [editable]="false" [(ngModel)]="product.activateTime"
+                                           format="yyyy-MM-dd"></eui-datebox>
+                           </label>
+                        </div>
+                        <div>
+                           <label>到期时间<span class="label-danger">*</span>：
+                              <eui-datebox [editable]="false" [(ngModel)]="product.expireTime"
+                                           format="yyyy-MM-dd"></eui-datebox>
+                           </label>
+                           <span
+                              *ngIf="product.expireTime && ((product.expireTime | dateCommonPipe : 'yyyyMMddHHmmss') <= (product.activateTime | dateCommonPipe : 'yyyyMMddHHmmss'))"
+                              style="color: red;">(产品到期时间必须大于激活时间！)</span>
+                        </div>
+                        <div>
+                           <label>试用：
+                              <eui-checkbox [(ngModel)]="product.isTrial"
+                                            (checkedChange)="EditIsTrial($event,product)"></eui-checkbox>
+                           </label>
+                        </div>
+                        <!--<div>-->
+                        <!--<label>发送邮件：-->
+                        <!--<eui-checkbox [(ngModel)]="product.ifSendEmail"></eui-checkbox>-->
+                        <!--</label>-->
+                        <!--</div>-->
+                        <div>
+                           <label>数据时间限制：
+                              <eui-checkbox [(ngModel)]="product.dataPeriod"
+                                            (checkedChange)="EditIsTrial($event,product)"></eui-checkbox>
+                           </label>
+                        </div>
+                        <div *ngIf="product.dataPeriod">
+                           <label>数据开始时间<span class="label-danger">*</span>：
+                              <eui-datebox [editable]="false" [(ngModel)]="product.dataStartTime"
+                                           format="yyyy-MM-dd"></eui-datebox>
+                           </label>
+                        </div>
+                        <div *ngIf="product.dataPeriod">
+                           <label>数据结束时间<span class="label-danger">*</span>：
+                              <eui-datebox [editable]="false" [(ngModel)]="product.dataEndTime"
+                                           format="yyyy-MM-dd"></eui-datebox>
+                           </label>
+                           <span
+                              *ngIf="product.dataPeriod && product.dataEndTime && ((product.dataEndTime | dateCommonPipe : 'yyyyMMddHHmmss') <= (product.dataStartTime | dateCommonPipe : 'yyyyMMddHHmmss'))"
+                              style="color: red;">(数据限制结束时间必须大于开始时间！)</span>
+                        </div>
+                        <div>
+                           <label>开通账户数<span class="label-danger">*</span>：
+                              <eui-numberbox [min]="product.accountUsedNum? product.accountUsedNum : 0"
+                                             [spinners]="true" [(ngModel)]="product.accountNum"></eui-numberbox>
+                           </label>
+
+                        </div>
+                        <div>
+                           <label>已使用账号：
+                              <eui-numberbox [min]="0" [disabled]="false" [spinners]="false" [editable]="false"
+                                             [(ngModel)]="product.accountUsedNum"></eui-numberbox>
+                           </label>
+                        </div>
+                        <div>
+                           <label>产品模块：
+                              <eui-tree [data]="data[i].modules" [checkbox]="true"
+                                        (checkChange)="data[i].checkedModuleNodes=$event"></eui-tree>
+                           </label>
+                        </div>
+                        <div>
+                           <label>标签模块：
+                              <eui-tree [data]="data[i].tags" [checkbox]="true"
+                                        (checkChange)="data[i].checkedTagNodes=$event"></eui-tree>
+                           </label>
+                        </div>
+                     </div>
+                  </eui-accordion-panel>
+               </eui-accordion>
+            </div>
+         </div>
+      </div>
+      <div class="modal-footer">
+         <button class="btn  btn-outline-success mr-2 mb-2 btn-sm" (click)="commitBuyProductTemplate()"
+                 type="button">保存
+         </button>
+         <button class="btn  btn-dark mr-2 mb-2 btn-sm" (click)="modalRef.hide()"
+                 type="button">关闭
+         </button>
+      </div>
+   </ng-template>
+   <!--添加用户模板-->
+   <ng-template #USER_TEMPLATE>
+
+      <div class="modal-header">
+         <h4 class="modal-title">批量添加用户</h4>
+
+         <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+            <span aria-hidden="true">&times;</span>
+         </button>
+      </div>
+      <div class="modal-body" style="padding-bottom: 5px;">
+         <label>选择产品：
+            <eui-combobox #products
+                          [(ngModel)]="productEditTemplateValues"
+                          [data]="productEditTemplateData"
+                          [multiple]="true"
+                          [editable]="false"
+                          [textFormatter]="formatText"></eui-combobox>
+         </label>
+         <label [for]="all">全选：
+            <eui-checkbox #all [(ngModel)]="productEditTemplateSelectedAll"
+                          (checkedChange)="batchEditProducts($event)"></eui-checkbox>
+         </label>
+         <label>邮箱后缀：
+            <eui-combobox #email_s
+                          [(ngModel)]="addUserTemplateValues"
+                          [data]="addUserTemplateData"
+                          [editable]="false"
+                          [textFormatter]="formatText"></eui-combobox>
+         </label>
+
+         <br/>
+         <label>发送邮件：</label>
+         <eui-checkbox #isSendEmail [checked]="true" (checkedChange)="showSendEmail($event)">
+         </eui-checkbox>
+         <br/>
+         <span *ngIf="ifSend">
+            <label>邮件类型：</label>
+            <eui-radiobutton #isTrial [value]="true" [inputId]="inputIds" [(ngModel)]="addUserTemplateIsTrial"
+                             name="emailType"></eui-radiobutton>
+            <label>试用邮件</label>
+            <eui-radiobutton #isTrial [value]="false" [inputId]="inputIds" [(ngModel)]="addUserTemplateIsTrial"
+                             name="emailType"></eui-radiobutton>
+            <label>正式邮件</label>
+         </span>
+         <br/>
+         <span *ngIf="ifSend">
+            <label>邮件语言：</label>
+            <eui-radiobutton #isEn [value]="false" [inputId]="inputIds" [(ngModel)]="addUserTemplateIsEn"
+                             name="isEn"></eui-radiobutton>
+            <label>中文邮件</label>
+            <eui-radiobutton #isEn [value]="true" [inputId]="inputIds" [(ngModel)]="addUserTemplateIsEn"
+                             name="isEn"></eui-radiobutton>
+            <label>英文邮件</label>
+         </span>
+
+         <eui-datagrid [data]="dataUser" [clickToEdit]="true" editMode="row" style="height:250px">
+            <eui-grid-column align="center" cellCss="datagrid-td-rownumber" width="30">
+               <ng-template euiCellTemplate let-rowIndex="rowIndex">
+                  {{rowIndex + 1}}
+               </ng-template>
+            </eui-grid-column>
+            <eui-grid-column field="userName" title="用户名" [editable]="true"></eui-grid-column>
+            <eui-grid-column field="email" title="邮箱" [editable]="true"></eui-grid-column>
+            <eui-grid-column field="userType" title="管理员" width="60px" align="center" [editable]="true">
+               <ng-template euiEditTemplate let-row="row">
+                  <eui-checkbox [(ngModel)]="row.userType" style="width:20px;height:20px"></eui-checkbox>
+               </ng-template>
+            </eui-grid-column>
+         </eui-datagrid>
+         <label class="red-color mt-2">注意：</label>
+         <ul>
+            <li>批量添加的用户权限默认继承企业最高级别产品权限</li>
+            <li>仅支持50以内用户批量添加,若同时给用户授权产品请保证 添加数量 <= 可用账户的数量</li>
+            <li>邮箱不可为空（只需输入前缀，不可添加@以及之后的后缀）</li>
+            <li>用户名可为空（默认选取邮箱前缀作为用户名）</li>
+         </ul>
+
+      </div>
+      <div class="modal-footer">
+         <button class="btn  btn-outline-success mr-2 mb-2 btn-sm" (click)="commitAddUserTemplate()"
+                 type="button">保存
+         </button>
+         <button class="btn  btn-dark mr-2 mb-2 btn-sm" (click)="modalRef.hide()"
+                 type="button">关闭
+         </button>
+      </div>
+   </ng-template>
+
+
+</section>
+

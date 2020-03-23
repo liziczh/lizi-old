@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.group3.bookstore.mapper.OrderMapper">
+    
+    <!--// 查看用户订单-->
+    <resultMap id="orderMap" type="OrderForm">
+        <id column="orderId" property="orderId"></id>
+        <result column="userId" property="userId"></result>
+        <result column="receiverId" property="receiverId"></result>
+        <result column="orderStatus" property="orderStatus"></result>
+        <result column="createTime" property="createTime"></result>
+        <result column="payTime" property="payTime"></result>
+        <result column="sendTime" property="sendTime"></result>
+        <result column="receiverTime" property="receiverTime"></result>
+        <result column="totalPrice" property="totalPrice"></result>
+        <result column="remark" property="remark"></result>
+        <collection property="orderItemSet" ofType="OrderItem">
+            <id column="orderId" property="orderId"></id>
+            <id column="commodityId" property="commodityId"></id>
+            <result column="commodityCount" property="commodityCount"></result>
+        </collection>
+    </resultMap>
+    <select id="getOrderByUserId" parameterType="string" resultMap="orderMap">
+        select o.userId,o.receiverId,o.orderStatus,o.createTime,o.payTime,o.sendTime,o.receiverTime,o.totalPrice,o.remark,i.commodityId, i.commodityCount from orderform o left join orderitem i on o.orderId = i.orderId where o.userId = #{userId} ;
+    </select>
+    <!--// 查看单个订单-->
+    <select id="getOrderByOrderId" parameterType="string" resultMap="orderMap">
+        select o.userId,o.receiverId,o.orderStatus,o.createTime,o.payTime,o.sendTime,o.receiverTime,o.totalPrice,o.remark,i.commodityId, i.commodityCount from orderform o , orderitem i where o.orderId = #{o.orderId} and o.orderId = i.orderId;
+    </select>
+    <!--// 新增订单-->
+    <insert id="insertOrder" parameterType="OrderForm">
+        insert into orderform values(#{orderId},#{userId},#{receiverId},#{orderStatus},#{createTime},#{payTime},#{sendTime},#{receiverTime},#{totalPrice},#{remark})
+    </insert>
+    <!--// 更新订单-->
+    <update id="updateOrder" parameterType="OrderForm">
+        update orderform set userId = #{userId},receiverId = #{receiverId},orderStatus = #{orderStatus}, createTime = #{createTime},payTime = #{payTime},sendTime = #{sendTime},receiverTime = #{receiverTime},totalPrice = #{totalPrice},remark = #{remark} where orderId = #{orderId}
+    </update>
+    <!--// 删除订单-->
+    <delete id="deleteOrder" parameterType="string">
+        delete from orderform where orderId = #{orderId}
+    </delete>
+
+</mapper>

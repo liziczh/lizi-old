@@ -1,0 +1,56 @@
+<nav class="cat__menu-left">
+   <div class="cat__menu-left__lock cat__menu-left__action--menu-toggle" (click)="menuVisible()">
+    <div class="cat__menu-left__pin-button">
+      <div><!-- --></div>
+    </div>
+   </div>
+   <div class="cat__menu-left__logo">
+    <a [routerLink]="['/']"><img src="assets/images/logo-inverse.png"/></a>
+   </div>
+   <div class="cat__menu-left__inner">
+      <ul class="cat__menu-left__list cat__menu-left__list--root">
+         <li class="cat__menu-left__item cat__menu-left__submenu" [routerLinkActive]="['cat__menu-left__item--active']">
+           <a href="javascript:;">
+             <span class="cat__menu-left__icon icmn-stats-bars"></span>
+             日志统计分析
+           </a>
+           <ul class="cat__menu-left__list">
+             <li class="cat__menu-left__item">
+               <a [routerLink]="['analysis']">
+                 <span class="cat__menu-left__icon"></span>客户行为分析
+               </a>
+             </li>
+           </ul>
+         </li>
+         <li class="cat__menu-left__item cat__menu-left__submenu" [routerLinkActive]="['cat__menu-left__item--active']">
+             <a href="javascript:;">
+                <span class="cat__menu-left__icon icmn-list"></span>
+                每日任务清单
+             </a>
+             <ul class="cat__menu-left__list">
+                <li class="cat__menu-left__item">
+                   <a [routerLink]="['checklist/person']">
+                      <span class="cat__menu-left__icon"></span>个人任务清单
+                   </a>
+                </li>
+                <!--<li class="cat__menu-left__item">
+                   <a [routerLink]="['checklist/manage']">
+                      <span class="cat__menu-left__icon"></span>每日任务配置
+                   </a>
+                </li>-->
+                <li class="cat__menu-left__item">
+                   <a [routerLink]="['checklist/history']">
+                      <span class="cat__menu-left__icon"></span>任务统计报表
+                   </a>
+                </li>
+             </ul>
+         </li>
+         <li class="cat__menu-left__divider"><!-- --></li>
+         <li class="cat__menu-left__item cat__menu-left__item--disabled">
+           <a href="javascript:;" (click)="logout()">
+             <span class="cat__menu-left__icon"></span>退出
+           </a>
+         </li>
+      </ul>
+   </div>
+</nav>

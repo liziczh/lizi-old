@@ -1,0 +1,74 @@
+.card-header {padding-left:0;padding-right:0;}
+.img-container{
+   /*height: 500px;*/
+}
+.app-alert-style{
+   position: absolute;
+   top: 4.90rem;
+   right: 1.42rem;
+   z-index: 99999;
+}
+
+.form-control-error {
+   bottom: 30px;
+   z-index: 3;
+}
+
+#productTemplate .cat__core__control--checkbox:hover{
+   background-color: #6a7a84;
+}
+
+.right{
+   position: absolute;
+   right: 24px;
+   height: 30px;
+   top: 5px;
+}
+.count{
+   display: inline-block;
+   border-radius: 6px;
+   background: #666;
+   color: #fff;
+   padding: 0 6px;
+   font-size: 12px;
+   line-height: 16px;
+   height: 16px;
+}
+
+.label-danger{
+   color: red ;
+   padding-left: 3px;
+}
+.error{
+   color: red;
+   font-size: 12px;
+   margin: 4px 0;
+}
+.form-label{
+   margin-bottom:6px;margin-left: 50px;
+}
+
+@media screen and (min-width: 768px) {
+   .max-width-lg {
+      max-width: 1200px;
+   }
+   .max-width-sm{
+      max-width: 300px;
+   }
+}
+@media screen and (min-width: 1366px) {
+   .max-width-lg {
+      max-width: 1200px;
+   }
+   .max-width-sm{
+      max-width: 400px;
+   }
+}
+@media screen and (min-width: 1980px) {
+   .max-width-lg {
+      max-width: 1400px;
+   }
+   .max-width-sm{
+      max-width: 400px;
+   }
+}

@@ -1,0 +1,28 @@
+.card-header {padding-left:0;padding-right:0;}
+
+.form-label{
+    margin-bottom:6px;margin-left: 50px;
+}
+.form-label label{
+    text-align: right;
+    margin-right: 10px;
+}
+.form-label .desc-label{
+    float: left;
+    width: 18%;
+}
+.error{
+    color: red;
+    margin: 4px 0;
+}
+.del-info{
+    color: gainsboro;
+}
+.cleaner{
+    font-size: 20px;
+    line-height: 1;
+    margin-left: 5px;
+}
+
+
+

@@ -1,0 +1,57 @@
+.card-header {padding-left:0;padding-right:0;}
+.img-container{
+   /*height: 500px;*/
+}
+.app-alert-style{
+   position: absolute;
+   top: 4.90rem;
+   right: 1.42rem;
+   z-index: 99999;
+}
+tbody{
+   font-size: 0.6rem;
+}
+.datagrid-cell{
+   font-size: 0.6rem;
+}
+.font-size-6{
+   /*font-size: 0.6rem;*/
+}
+
+.form-label{
+   margin-bottom:6px;margin-left: 50px;
+}
+.form-label label{
+   text-align: right;
+   margin-right: 10px;
+}
+.error{
+   color: red;
+   font-size: 12px;
+   margin: 4px 0;
+}
+
+@media screen and (min-width: 768px) {
+   .max-width-lg {
+      max-width: 1200px;
+   }
+   .max-width-sm{
+      max-width: 300px;
+   }
+}
+@media screen and (min-width: 1366px) {
+   .max-width-lg {
+      max-width: 1200px;
+   }
+   .max-width-sm{
+      max-width: 400px;
+   }
+}
+@media screen and (min-width: 1980px) {
+   .max-width-lg {
+      max-width: 1400px;
+   }
+   .max-width-sm{
+      max-width: 400px;
+   }
+}

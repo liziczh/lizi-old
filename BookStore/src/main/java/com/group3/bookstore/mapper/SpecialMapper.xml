@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.group3.bookstore.mapper.SpecialMapper">
+    <!--获取分类通过分类通过分类名称-->
+    <select id="getAllSpecial" resultType="com.group3.bookstore.pojo.Special">
+        select * from special
+    </select>
+    <!--根据名称获取当前专题-->
+    <select id="getSpecialBySpecialSort" resultType="com.group3.bookstore.pojo.Special" parameterType="string">
+        select * from special where specialSort = #{specialSort}
+    </select>
+    <!--编辑专题-->
+    <update id="updateSowingMapPath" parameterType="string">
+        update special set specialSort = #{specialSort},#{sowingMap}
+    </update>
+
+</mapper>

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.group3.bookstore.mapper.CategoryMapper">
+    <select id="selectAncestorCategory" resultType="Category">
+        select * from category where parrentCategoryId = null
+    </select>
+    <select id="selectChildCategory" resultType="Category" parameterType="String">
+        select * from category where parrentCategoryId = #{arg0}
+    </select>
+    <select id="selectPerrentCategory" resultType="Category" parameterType="String">
+        select * from category where categoryId = (select parrentCategoryId from category where categoryId = #{arg0})
+    </select>
+
+</mapper>

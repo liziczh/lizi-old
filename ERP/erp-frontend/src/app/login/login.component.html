@@ -1,0 +1,114 @@
+<!-- START: pages/login-alpha -->
+<ng-progress
+   [color]="'#1B95E0'"
+   [showSpinner]="false"
+   [thick]="false"
+></ng-progress>
+<div class="cat__pages__login" style="background-image: url(assets/images/login/1.jpg)">
+
+   <div class="cat__pages__login__header">
+      <div class="row">
+         <div class="col-lg-8">
+            <div class="cat__pages__login__header__logo">
+               <a href="javascript: history.back();">
+                  <img src="assets/images/logo-inverse.png" alt="Clean UI Admin Template"/>
+               </a>
+               <a href="javascript: void(0);" class="btn btn-sm btn-outline ml-3 random-bg-image" data-img="1">Randomize
+                  Background Image</a>
+            </div>
+         </div>
+      </div>
+   </div>
+
+   <div class="cat__pages__login__block">
+      <div class="row">
+         <div class="col-xl-12">
+            <div class="cat__pages__login__block__promo text-white text-center">
+               <h1 class="mb-3">
+                  <strong>欢迎使用企业资源管理平台</strong>
+               </h1>
+            </div>
+
+            <div class="cat__pages__login__block__inner">
+               <div class="qm_login_change">
+                  <a class="pc" id="pc" title="电脑登录">
+                     <i class="icmn-display" style=""></i>
+                  </a>
+               </div>
+               <div class="icon-tip" style="background: none;">
+                  <div class="triangle-bottomleft"></div>
+               </div>
+
+               <div class="cat__pages__login__block__form">
+                  <h4 class="text-uppercase">
+                     <strong>用户登录</strong>
+                  </h4>
+                  <br/>
+                  <form [formGroup]="loginForm" novalidate>
+
+                     <div class="form-group"
+                          [class.has-danger]="loginForm.get('username').touched && (loginForm.hasError('minlength', ['username']) || loginForm.hasError('required', ['username']))">
+                        <label class="form-label">Username</label>
+                        <input class="form-control" (change)="loginForm.patchValue({message: ''})"
+                               [class.has-danger]="loginForm.get('username').touched && (loginForm.hasError('minLength', ['username']) || loginForm.hasError('required', ['username']))"
+                               formControlName="username" id="username" placeholder="Email or Username" type="text">
+                        <div class="form-control-error"
+                             *ngIf="loginForm.get('username').touched && loginForm.hasError('required', ['username'])">
+                           <ul>
+                              <li>用户名(邮箱)是必填的</li>
+                           </ul>
+                        </div>
+                        <div class="form-control-error"
+                             *ngIf="loginForm.get('username').touched && loginForm.hasError('minlength', ['username'])">
+                           <ul>
+                              <li>用户名(邮箱)长度最少为2</li>
+                           </ul>
+                        </div>
+                     </div>
+
+                     <div class="form-group"
+                          [class.has-danger]="loginForm.get('password').touched && (loginForm.hasError('minlength', ['password']) || loginForm.hasError('required', ['password']))">
+                        <label class="form-label">Password</label>
+                        <input class="form-control password"
+                               [class.has-danger]="loginForm.get('password').touched && (loginForm.hasError('minLength', ['password']) || loginForm.hasError('required', ['password']))"
+                               formControlName="password" (change)="loginForm.patchValue({message: ''})" id="password"
+                               placeholder="Password" type="password">
+                        <div class="form-control-error"
+                             *ngIf="loginForm.get('password').touched && loginForm.hasError('required', ['password'])">
+                           <ul>
+                              <li>密码是必填的</li>
+                           </ul>
+                        </div>
+                        <div class="form-control-error"
+                             *ngIf="loginForm.get('password').touched && loginForm.hasError('minlength', ['password'])">
+                           <ul>
+                              <li>密码长度最少为6</li>
+                           </ul>
+                        </div>
+                     </div>
+
+                     <div class="form-group">
+                        <a href="javascript: void(0);"
+                           class="pull-right cat__core__link--blue cat__core__link--underlined">Forgot Password?</a>
+                        <label>
+                           <input type="checkbox" name="rememberMe" formControlName="rememberMe" checked> Remember me
+                        </label>
+                     </div>
+                     <div class="form-actions">
+                        <button type="submit" class="btn btn-primary mr-3 pull-right"
+                                (click)="submit()"
+                                [disabled]="!loginForm.valid">登录
+                        </button>
+                     </div>
+                  </form>
+               </div>
+            </div>
+         </div>
+      </div>
+   </div>
+
+
+</div>
+<!-- END: pages/login-alpha -->
+
+

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.group3.bookstore.mapper.ReceiverMapper">
+    <!--查看收货信息列表（getAllReceiver）：-->
+    <select id="getReceiverByUserId" parameterType="string">
+        select * from receiver where userId = #{userId}
+    </select>
+    <!--查看收获信息项（getReceiverByReceiverId）：-->
+    <select id="getReceiverByReceiverId" parameterType="string">
+        select * from receiver where receiverId = #{receiverId}
+    </select>
+    <!--添加收货信息项（addReceiver）：-->
+    <insert id="insertReceiver" parameterType="Receiver">
+        insert into receiver values(#{receiverId},#{userId},#{receiverName},#{receiverPhoneNumber},#{province},#{city},#{county},#{street});
+    </insert>
+    <!--更新收货信息项（modifyReceiver）： -->
+    <update id="updateReceiver" parameterType="Receiver">
+        update receiver set userId = #{userId},receiverName = #{receiverName}, receiverPhoneNumber = #{receiverPhoneNumber}, province = #{province}, city = #{city}, county = #{county}, street = #{street} where receiverId = #{receiverId}
+    </update>
+    <!--删除收货信息项（removeReceiver）：-->
+    <delete id="deleteReceiver" parameterType="string">
+        delete from receiver where receiver = #{receiverId}
+    </delete>
+    
+</mapper>

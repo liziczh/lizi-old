@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.group3.bookstore.mapper.OrderItemMapper">
+    <!--// 查看用户订单-->
+    <select id="getOrderItemByOrderId" parameterType="string">
+        select * from orderitem where orderId = #{orderId}
+    </select>
+    <!--// 新增订单-->
+    <insert id="insertOrderItem" parameterType="OrderItem">
+        insert into orderitem values(#{orderId},#{commodityId},#{commodityCount})
+    </insert>
+    <!--// 删除订单-->
+    <delete id="deleteOrderItem" parameterType="string">
+        delete from orderitem where orderId = #{orderId}
+    </delete>
+
+</mapper>

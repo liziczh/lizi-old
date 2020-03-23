@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.group3.bookstore.mapper.FavoritesItemMapper">
+    <!--获取一个收藏项-->
+    <select id="getFavoritesItemByUserIdAndCommodityId" resultType="FavoritesItem">
+        select * from favoritesitem where userId = #{arg0} and commodityId = #{arg1}
+    </select>
+    <!--获取收藏项-->
+    <select id="getFavoritesItemByUserId" parameterType="string" resultType="FavoritesItem">
+        select * from favoritesitem where userId = #{userId}
+    </select>
+    <!--插入收藏项-->
+    <insert id="insertFavoritesItem" parameterType="FavoritesItem">
+        insert into favoritesitem values(#{userId},#{commodityId})
+    </insert>
+    <!--删除收藏项-->
+    <delete id="deleteFavoritesItem">
+         delete from favoritesitem where userId = #{arg0} and commodityId = #{arg1}
+    </delete>
+
+</mapper>

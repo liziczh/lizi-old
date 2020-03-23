@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.group3.bookstore.mapper.AdMapper">
+
+    <!--增一条广告-->
+    <insert id="insertAd" parameterType="com.group3.bookstore.pojo.Ad">
+        insert into ad(adId,adName,adImg) values(#{adId},#{adName},#{adImg})
+--         insert into ad(adName,adImg) values(#{adName},#{adImg})
+
+    </insert>
+    <!--根据广告名称删除一条广告-->
+    <delete id="deleteAdByAdName" parameterType="string">
+        delete from ad where adName = #{adName}
+    </delete>
+    <!--修改广告信息-->
+    <update id="updateAd" parameterType="String">
+        update ad set adName = #{adName},adImg = #{adImg}
+    </update>
+    <!--查询所有的广告-->
+    <select id="getAllAd" resultType="com.group3.bookstore.pojo.Ad">
+        select * from ad
+    </select>
+    <!--根据广告名称查询某一广告-->
+    <select id="getAdByAdName" resultType="com.group3.bookstore.pojo.Ad">
+        select * from ad where adName = #{adName}
+    </select>
+
+</mapper>

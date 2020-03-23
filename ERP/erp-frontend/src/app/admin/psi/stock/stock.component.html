@@ -1,0 +1,142 @@
+<section class="card" xmlns="http://www.w3.org/1999/html" style="background:none;border:0;">
+    <!--页面头部-->
+    <div class="card-header" style="background:none;border:0;">
+        <div class="col-md-4  pull-right mt-2">
+            <div class="form-group pull-right">
+
+            </div>
+        </div>
+        <span class="cat__core__title"><strong>库存</strong></span>
+        <small class="text-muted"></small>
+    </div>
+    <!--页面主体-->
+    <div class="mt-3" id="analysisBox">
+        <div class="mt-5">
+            <div style="margin-bottom:8px; height: 30px;">
+                <!--顶部按钮-->
+                <eui-linkbutton *ngIf="user.role.code === 'admin' || user.role.code === 'stock'" iconCls="icon-add"
+                                (click)="openStockAllot(STOCK_ALLOT_TEMPLATE)">库存内部调拨
+                </eui-linkbutton>
+                <!--类型-->
+                <eui-combobox style="float: right;margin-left: 10px;" placeholder="请选择仓库" [editable]="false"
+                              [data]="warehouseListOptions" [(ngModel)]="selectedWarehouseId" valueField="id" textField="name"
+                              (valueChange)="onWarehouseChange($event)">
+                </eui-combobox>
+            </div>
+            <!--数据表格-->
+            <eui-datagrid
+                    [pagination]="true"
+                    [lazy]="true"
+                    [data]="stockList"
+                    [total]="totalSize"
+                    [pageNumber]="pageNum"
+                    [pageSize]="limit"
+                    [loading]="loading"
+                    style="height: 100%;clear: both;"
+                    (pageChange)="onPageChange($event)">
+                <eui-grid-column title="编号" align="center" cellCss="datagrid-td-rownumber" width="5%">
+                    <ng-template euiCellTemplate let-rowIndex="rowIndex" class="font-size-6">
+                        <div class="item font-size-6">{{rowIndex + 1}}</div>
+                    </ng-template>
+                </eui-grid-column>
+                <eui-grid-column field="warehouse" title="仓库" align="left" width="8%">
+                    <ng-template euiCellTemplate let-row>
+                        <div class="item font-size-6">
+                            <div [title]="row.warehouse.name">{{row.warehouse.name}}</div>
+                        </div>
+                    </ng-template>
+                </eui-grid-column>
+                <eui-grid-column field="name" title="商品名称" align="left" width="12%">
+                    <ng-template euiCellTemplate let-row>
+                        <div class="item font-size-6">
+                            <div [title]="row.product.name">{{row.product.name}}</div>
+                        </div>
+                    </ng-template>
+                </eui-grid-column>
+                <eui-grid-column field="code" title="商品CODE" align="left" width="12%">
+                    <ng-template euiCellTemplate let-row>
+                        <div class="item font-size-6">
+                            <div [title]="row.product.code">{{row.product.code}}</div>
+                        </div>
+                    </ng-template>
+                </eui-grid-column>
+                <eui-grid-column field="type" title="商品类型" align="left" width="8%">
+                    <ng-template euiCellTemplate let-row>
+                        <div class="item font-size-6">
+                            <div [title]="row.product.type.name">{{row.product.type.name}}</div>
+                        </div>
+                    </ng-template>
+                </eui-grid-column>
+                <eui-grid-column field="spec" title="规格" align="left" width="8%">
+                    <ng-template euiCellTemplate let-row>
+                        <div class="item font-size-6">
+                            <div [title]="row.product.spec">{{row.product.spec}}</div>
+                        </div>
+                    </ng-template>
+                </eui-grid-column>
+                <eui-grid-column field="brand" title="品牌" align="left" width="12%">
+                    <ng-template euiCellTemplate let-row>
+                        <div class="item font-size-6">
+                            <div [title]="row.product.brand">{{row.product.brand}}</div>
+                        </div>
+                    </ng-template>
+                </eui-grid-column>
+                <eui-grid-column field="count" title="商品数量" align="left" width="12%">
+                    <ng-template euiCellTemplate let-row>
+                        <div class="item font-size-6">
+                            <div [title]="row.count">{{row.count}}</div>
+                        </div>
+                    </ng-template>
+                </eui-grid-column>
+            </eui-datagrid>
+        </div>
+    </div>
+
+</section>
+
+<!--商品内部调拨模板-->
+<ng-template #STOCK_ALLOT_TEMPLATE>
+    <div class="modal-header">
+        <h5 class="modal-title">{{'库存内部调拨'}}</h5>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide();">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <form novalidate [formGroup]="stockAllotForm">
+            <div class="form-label">
+                <label [for]="warehouse" align="left" class="desc-label">仓库<span class="red-color">*</span></label>
+                <eui-combobox #warehouse style="width: 60%;" formControlName="warehouseId" [editable]="false"
+                              [data]="warehouseList" [valueField]="'id'" [textField]="'name'"
+                              (valueChange)="onFormWarehouseChange($event)" ></eui-combobox>
+                <label class="error" *ngIf="stockAllotForm.get('warehouseId').hasError('required')">请选择仓库</label>
+            </div>
+            <div *ngIf="productList.length !== 0" class="form-label">
+                <label [for]="product" align="left" class="desc-label">商品<span class="red-color">*</span></label>
+                <eui-combobox #product style="width: 60%;" formControlName="productId" [editable]="false"
+                              [data]="productList" [valueField]="'id'" [textField]="'name'"></eui-combobox>
+                <label class="error" *ngIf="stockAllotForm.get('productId').hasError('required')">请选择商品</label>
+            </div>
+            <div *ngIf="stockAllotForm.value.productId !== ''" class="form-label">
+                <label [for]="count" align="left" class="desc-label">商品数量<span class="red-color">*</span></label>
+                <eui-textbox #count maxlength="20" style="width: 60%;" formControlName="count"
+                             placeholder="请输入商品数量"></eui-textbox>
+                <label class="error" *ngIf="stockAllotForm.get('count').hasError('required')">请输入产品数量</label>
+                <label class="error" *ngIf="stockAllotForm.get('count').hasError('maxlength')">20字以内</label>
+            </div>
+            <div *ngIf="stockAllotForm.value.count !== ''" class="form-label">
+                <label [for]="allotWarehouse" align="left" class="desc-label">调拨仓库<span class="red-color">*</span></label>
+                <eui-combobox #allotWarehouse style="width: 60%;" formControlName="allotWarehouseId" [editable]="false"
+                              [data]="warehouseList" [valueField]="'id'" [textField]="'name'"></eui-combobox>
+                <label class="error" *ngIf="stockAllotForm.get('warehouseId').hasError('required')">请选择调拨仓库</label>
+            </div>
+        </form>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn  btn-outline-success mr-2 mb-2 btn-sm" [disabled]="stockAllotForm.invalid"
+                (click)="submitStockAllot()">
+            提交
+        </button>
+        <button type="button" class="btn  btn-dark mr-2 mb-2 btn-sm" (click)="modalRef.hide();">关闭</button>
+    </div>
+</ng-template>

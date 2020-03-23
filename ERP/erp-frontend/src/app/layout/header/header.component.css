@@ -1,0 +1,11 @@
+@media screen and (max-width:550px){
+   .cat__top-bar__left{
+      display: none;
+   }
+}
+@media screen and (max-width:800px){
+   .hidden-lg-down{
+      display: none;
+   }
+}
+

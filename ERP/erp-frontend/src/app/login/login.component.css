@@ -1,0 +1,54 @@
+.qm_login_change{position:absolute;top:0;width:100%;}
+.qm_login_change{position:absolute;top:0;right:0;width:80px;height:80px;z-index:20;font-size: 70px;color: #f40;}
+.qm_login_change .pc{font-size: 53px;background-repeat:no-repeat; display:block;padding-left: 17px;}
+.qm_login_change .pc:hover{color: #f52b00;}
+.qm_login_change .wx{background-repeat:no-repeat; width:80px; height:80px; display:block; }
+.qm_login_change .wx:hover{color: #f52b00;}
+
+
+.login-tip { position:absolute; top:5px; right:48px;}
+.poptip {border:1px solid #f3d995;top:20px;right: 40px;line-height:16px;padding:5px 20px 5px 15px;background:#fefcee;position:relative;}
+.icon-tip{position: absolute;right: 10px;top: 10px;z-index:30;pointer-events: none;}
+.triangle-bottomleft {
+   top: 0;
+   right: 0;
+   position:relative;
+   width: 0;
+   height: 0;
+   border-bottom: 75px solid white;
+   border-right: 72px solid transparent;
+}
+
+.poptip .poptip-content {color:#df9c1f;font-size:12px;font-weight:400;}
+.poptip .poptip-content .iconfont {color:#df9c1f;font-size:14px;margin-right:8px;}
+.poptip-arrow {position:absolute;z-index:10;*zoom:1;}
+.poptip-arrow em,.poptip-arrow span {
+   position:absolute;
+   *zoom:1;
+   width:0;
+   height:0;
+   border-color:rgba(255,255,255,0);
+   border-color:transparent \0;
+   *border-color:transparent;
+   _border-color:tomato;
+   _filter:chroma(color=tomato);
+   border-style:solid;
+   overflow:hidden;
+   top:0;
+   left:0
+}
+.poptip-arrow {
+   top:8px;
+   right:0
+}
+.poptip-arrow em {
+   top:0;
+   left:1px;
+   border-left-color:#f3d995;
+   border-width:6px 0 6px 6px
+}
+.poptip-arrow span {
+   border-left-color:#fefcee;
+   border-width:6px 0 6px 6px
+}
+

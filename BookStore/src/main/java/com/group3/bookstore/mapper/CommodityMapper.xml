@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.group3.bookstore.mapper.CommodityMapper">
+    <resultMap id="commodityList" type="com.group3.bookstore.pojo.Commodity">
+        <id column="commodityId" property="commodityId"/>
+        <result column="commodityName" property="commodityName"/>
+        <result column="commodityDescription" property="commodityDescription"/>
+        <result column="commodityImg" property="commodityImg"/>
+        <result column="category" property="category"/>
+        <result column="commodityIntroduction" property="commodityIntroduction"/>
+        <result column="commodityContents" property="commodityContents"/>
+        <result column="commodityPrice" property="commodityPrice"/>
+        <result column="commodityPurchasePrice" property="commodityPurchasePrice"/>
+        <result column="authorName" property="authorName"/>
+        <result column="publishHouse" property="publishHouse"/>
+        <result column="publishDate" property="publishDate"/>
+        <result column="commodityCount" property="commodityCount"/>
+        <result column="salesCount" property="salesCount"/>
+        <result column="collectCount" property="collectCount"/>
+        <result column="commentCount" property="commentCount"/>
+    </resultMap>
+    <select id="selectAll" resultType="Commodity" parameterType="_int">
+        <!--select * from commodity b ,category c-->
+            <!--<where>-->
+
+                <!--<if test="param2 != null">-->
+                    <!--and commodityName like '%'#{param2}'%'-->
+                <!--</if>-->
+                <!--<if test="param3 != null">-->
+                    <!--and b.categoryId = #{param3} or c.parrentCategoryId = #{param3}-->
+                    <!--and b.categoryId = c.categoryId-->
+                <!--</if>-->
+            <!--</where>-->
+        <!--order by-->
+                    <!--salesCount-->
+
+        <!--limit #{param1},10;-->
+        select * from commodity
+    </select>
+    <select id="selectById" resultType="Commodity">
+        select * from commodity where commodityId = #{commodityId}
+    </select>
+    <select id="selectByTime" resultType="Commodity">
+        select * from  commodity order by publishDate limit 0,9
+    </select>
+    <select id="selectBySalesCount" resultType="Commodity">
+        select * from commodity order by salesCount limit 0,9
+    </select>
+
+    <insert id="addCommodity" parameterType="Commodity">
+        insert into commodity values (#{commodityId},#{commodityName},#{commodityDescription},#{commodityImg},#{categoryId},#{commodityIntroduction},#{commodityContents}
+            ,#{commodityPrice},#{commodityPurchasePrice},#{authorName},#{publishHouse},#{publishDate},#{commodityCount},#{salesCount},#{collectCount},#{commentCount})
+    </insert>
+    <update id="updateCommodity" parameterType="Commodity">
+        update commodity set
+            ,commodityName = #{commodityName}
+            ,commodityDescription = #{commodityDescription}
+            ,commodityImg = #{commodityImg}
+            ,categoryId = #{categoryId}
+            ,commodityIntroduction = #{commodityIntroduction}
+            ,commodityContents = #{commodityContents}
+            ,commodityPrice = #{commodityPrice}
+            ,commodityPurchasePrice = #{commodityPurchasePrice}
+            ,authorName = #{authorName}
+            ,publishHouse = #{publishHouse}
+            ,publishDate = #{publishDate}
+            ,commodityCount = #{commodityCount}
+            ,salesCount = #{salesCount}
+            ,collectCount = #{collectCount}
+            ,commentCount = #{commentCount}
+            where commodityId = #{commodityId}
+    </update>
+    <delete id="deleteCommodity" parameterType="String">
+        delete from commodity where commodityId = #{id}
+    </delete>
+
+</mapper>

@@ -1,0 +1,225 @@
+<section class="card" xmlns="http://www.w3.org/1999/html" style="background:none;border:0;">
+    <!--页面头部-->
+    <div class="card-header" style="background:none;border:0;">
+        <div class="col-md-4  pull-right mt-2">
+            <div class="form-group pull-right">
+
+            </div>
+        </div>
+        <span class="cat__core__title"><strong>客户</strong></span>
+        <small class="text-muted"></small>
+    </div>
+    <!--页面主体-->
+    <div class="mt-3" id="analysisBox">
+        <div class="mt-5">
+            <div style="margin-bottom:8px; height: 30px;">
+                <!--顶部按钮-->
+                <eui-linkbutton *ngIf="user.role.code === 'admin' || user.role.code === 'sale'" iconCls="icon-add" (click)="openAddCustomer(EDIT_CUSTOMER_TEMPLATE)">添加</eui-linkbutton>
+                <eui-searchbox #sb style="width:200px;float: right;margin-left: 10px;"
+                               placeholder="输入客户名称搜索" [formControl]="searchInput">
+                    <eui-addon>
+                  <span *ngIf="sb.value !== null" class="textbox-icon icon-clear" title="清空"
+                        (click)="sb.value = null"></span>
+                    </eui-addon>
+                </eui-searchbox>
+                <!--类型-->
+                <eui-combobox style="float: right;margin-left: 10px;" placeholder="请选择类型" [editable]="false"
+                              [data]="typeListOptions" [(ngModel)]="selectedTypeId" valueField="id" textField="name"
+                              (valueChange)="onTypeChange($event)">
+                </eui-combobox>
+            </div>
+            <!--数据表格-->
+
+            <eui-datagrid
+                    [pagination]="true"
+                    [lazy]="true"
+                    [data]="customerList"
+                    [total]="totalSize"
+                    [pageNumber]="pageNum"
+                    [pageSize]="limit"
+                    [loading]="loading"
+                    style="height: 100%;clear: both;"
+                    (pageChange)="onPageChange($event)">
+                <eui-grid-column title="编号" align="center" cellCss="datagrid-td-rownumber" width="5%">
+                    <ng-template euiCellTemplate let-rowIndex="rowIndex" class="font-size-6">
+                        <div class="item font-size-6">{{rowIndex + 1}}</div>
+                    </ng-template>
+                </eui-grid-column>
+                <eui-grid-column field="name" title="客户名称" align="left" width="12%">
+                    <ng-template euiCellTemplate let-row>
+                        <div class="item font-size-6">
+                            <div [title]="row.name">{{row.name}}</div>
+                        </div>
+                    </ng-template>
+                </eui-grid-column>
+                <eui-grid-column field="code" title="客户CODE" align="left" width="12%">
+                    <ng-template euiCellTemplate let-row>
+                        <div class="item font-size-6">
+                            <div [title]="row.code">{{row.code}}</div>
+                        </div>
+                    </ng-template>
+                </eui-grid-column>
+                <eui-grid-column field="type" title="客户类型" align="left" width="6%">
+                    <ng-template euiCellTemplate let-row>
+                        <div class="item font-size-6">
+                            <div [title]="row.type.name">{{row.type.name}}</div>
+                        </div>
+                    </ng-template>
+                </eui-grid-column>
+                <eui-grid-column field="contact" title="联系人" align="left" width="8%">
+                    <ng-template euiCellTemplate let-row>
+                        <div class="item font-size-6">
+                            <div [title]="row.contact">{{row.contact}}</div>
+                        </div>
+                    </ng-template>
+                </eui-grid-column>
+                <eui-grid-column field="email" title="邮箱" align="left" width="15%">
+                    <ng-template euiCellTemplate let-row>
+                        <div class="item font-size-6">
+                            <div [title]="row.email">{{row.email}}</div>
+                        </div>
+                    </ng-template>
+                </eui-grid-column>
+                <eui-grid-column field="phone" title="联系电话" align="left" width="12%">
+                    <ng-template euiCellTemplate let-row>
+                        <div class="item font-size-6">
+                            <div [title]="row.phone">{{row.phone}}</div>
+                        </div>
+                    </ng-template>
+                </eui-grid-column>
+                <eui-grid-column field="phone2" title="联系电话2" align="left" width="12%">
+                    <ng-template euiCellTemplate let-row>
+                        <div class="item font-size-6">
+                            <div [title]="row.phone2">{{row.phone2}}</div>
+                        </div>
+                    </ng-template>
+                </eui-grid-column>
+                <eui-grid-column field="address" title="地址" align="left" width="15%">
+                    <ng-template euiCellTemplate let-row>
+                        <div class="item font-size-6">
+                            <div [title]="row.address">{{row.address}}</div>
+                        </div>
+                    </ng-template>
+                </eui-grid-column>
+
+                <eui-grid-column *ngIf="user.role.code === 'admin' || user.role.code === 'sale'" title="操作" align="center" width="6%">
+                    <ng-template euiCellTemplate let-row>
+                        <div class="item">
+                            <a title="编辑" (click)="openEditCustomer(EDIT_CUSTOMER_TEMPLATE, row)"
+                               class="mr-1" href="javascript: void(0);"><i class="icmn-pencil2"></i></a>
+                            <a title="移除" (click)="openDeleteCustomer(DELETE_CUSTOMER_TEMPLATE, row)"
+                               class="mr-1" href="javascript: void(0);"><i class="icmn-bin"></i></a>
+                        </div>
+                    </ng-template>
+                </eui-grid-column>
+            </eui-datagrid>
+        </div>
+    </div>
+
+</section>
+
+<!--编辑客户模板-->
+<ng-template #EDIT_CUSTOMER_TEMPLATE>
+    <div class="modal-header">
+        <h5 class="modal-title">{{ifAdd ? '添加客户' : '修改客户'}}</h5>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <form novalidate [formGroup]="customerForm">
+            <div class="form-label">
+                <label [for]="name" align="left" class="desc-label">客户名称<span class="red-color">*</span></label>
+                <eui-textbox #name maxlength="20" style="width: 60%;" formControlName="name"
+                             placeholder="请输入客户名称"></eui-textbox>
+                <label class="error" *ngIf="customerForm.get('name').hasError('required')">请输入名称</label>
+                <label class="error" *ngIf="customerForm.get('name').hasError('maxlength')">20字以内</label>
+            </div>
+            <div class="form-label">
+                <label [for]="code" align="left" class="desc-label">客户Code<span class="red-color">*</span></label>
+                <eui-textbox #code maxlength="20" style="width: 60%;" formControlName="code" pattern="^[A-Za-z0-9]+$"
+                             placeholder="请输入客户Code（由数字与字母组成）"></eui-textbox>
+                <label class="error" *ngIf="customerForm.get('code').hasError('required')">请输入Code</label>
+                <label class="error" *ngIf="customerForm.get('code').hasError('maxlength')">20字以内</label>
+                <label class="error" *ngIf="customerForm.get('code').hasError('pattern')">请按格式输入</label>
+            </div>
+            <div class="form-label">
+                <label [for]="type" align="left" class="desc-label">供应商类型<span class="red-color">*</span></label>
+                <eui-combobox #type style="width: 60%;" formControlName="type" [editable]="false"
+                              [data]="customerTypeList" [valueField]="'id'" [textField]="'name'"
+                              (valueChange)="onFormTypeChange($event)"></eui-combobox>
+                <label class="error" *ngIf="customerForm.get('type').hasError('required')">请选择类型</label>
+            </div>
+            <div class="form-label">
+                <label [for]="contact" align="left" class="desc-label">联系人<span class="red-color">*</span></label>
+                <eui-textbox #contact maxlength="10" style="width: 60%;" formControlName="contact"
+                             placeholder="请输入联系人"></eui-textbox>
+                <label class="error" *ngIf="customerForm.get('contact').hasError('required')">请输入联系人</label>
+                <label class="error" *ngIf="customerForm.get('contact').hasError('maxlength')">10字以内</label>
+            </div>
+            <div class="form-label">
+                <label [for]="email" align="left" class="desc-label">邮箱<span class="red-color">*</span></label>
+                <eui-textbox #email maxlength="30" style="width: 60%;" formControlName="email"
+                             placeholder="请输入邮箱"></eui-textbox>
+                <label class="error" *ngIf="customerForm.get('email').hasError('required')">请输入邮箱</label>
+            </div>
+            <div class="form-label">
+                <label [for]="phone" align="left" class="desc-label">联系电话<span class="red-color">*</span></label>
+                <eui-textbox #phone maxlength="20" style="width: 60%;" formControlName="phone" pattern="^[1]([3-9])[0-9]{9}$"
+                             placeholder="请输入联系电话"></eui-textbox>
+                <label class="error" *ngIf="customerForm.get('phone').hasError('required')">请输入联系电话</label>
+                <label class="error" *ngIf="customerForm.get('phone').hasError('pattern')">请按格式输入</label>
+            </div>
+            <div class="form-label">
+                <label [for]="phone2" align="left" class="desc-label">联系电话2</label>
+                <eui-textbox #phone2 maxlength="20" style="width: 60%;" formControlName="phone2" pattern="^[1]([3-9])[0-9]{9}$"
+                             placeholder="请输入联系电话2"></eui-textbox>
+                <label class="error" *ngIf="customerForm.get('phone2').hasError('required')">请输入联系电话2</label>
+                <label class="error" *ngIf="customerForm.get('phone2').hasError('pattern')">请按格式输入</label>
+            </div>
+            <div class="form-label">
+                <label [for]="address" align="left" class="desc-label">地址</label>
+                <eui-textbox #address maxlength="30" style="width: 60%;" formControlName="address"
+                             placeholder="请输入地址"></eui-textbox>
+                <label class="error" *ngIf="customerForm.get('address').hasError('maxlength')">30字以内</label>
+            </div>
+            <div class="form-label">
+                <label [for]="memo" align="left" class="desc-label">备注</label>
+                <textarea #memo class="form-control" formControlName="memo" maxlength="400" rows="5"
+                          style="width: 60%;display: inline-block;padding: 4px;" placeholder="请输入备注"></textarea>
+                <label class="error" *ngIf="customerForm.get('memo').hasError('maxlength')"
+                       style="vertical-align: top;">100字以内</label>
+            </div>
+        </form>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn  btn-outline-success mr-2 mb-2 btn-sm" [disabled]="!customerForm.valid"
+                (click)="ifAdd ? submitAddCustomer() : submitEditCustomer()">
+            提交
+        </button>
+        <button type="button" class="btn  btn-dark mr-2 mb-2 btn-sm" (click)="modalRef.hide()">关闭</button>
+    </div>
+</ng-template>
+
+<!--删除客户-->
+<ng-template #DELETE_CUSTOMER_TEMPLATE>
+    <div class="modal-header">
+        <h5 class="modal-title">删除客户</h5>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <h5 class="modal-body">
+            您确定要删除客户<span class="error">{{deletedCustomer.name}}</span>吗？
+        </h5>
+    </div>
+    <div class="modal-footer">
+        <button class="btn  btn-outline-success mr-2 mb-2 btn-sm" (click)="deleteCustomer(deletedCustomer.id)"
+                type="button">确定
+        </button>
+        <button class="btn  btn-dark mr-2 mb-2 btn-sm" (click)="modalRef.hide()"
+                type="button">关闭
+        </button>
+    </div>
+</ng-template>

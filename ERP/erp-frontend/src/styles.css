@@ -1,0 +1,85 @@
+/* You can add global styles to this file, and also import other style files */
+/* add vendors style files */
+/*@import url(../node_modules/bootstrap/dist/css/bootstrap.min.css);*/
+@import url(assets/vendors/bootstrap/css/bootstrap.min.css);
+@import url(assets/vendors/font-icomoon/style.css);
+@import url(assets/vendors/font-linearicons/style.css);
+@import url(assets/vendors/font-awesome/css/font-awesome.min.css);
+/* add custom style files */
+@import url(assets/css/preloader.css);
+@import url(assets/css/core/ui.core.css);
+@import url(assets/css/login/ui.login.css);
+@import url(assets/css/vendors/ui.vendors.css);
+@import url(assets/css/themes/ui.themes.css);
+@import url(assets/css/layouts/ui.layouts.css);
+@import url(assets/css/layouts/header/ui.header.css);
+@import url(assets/css/layouts/menu-left/ui.menu-left.css);
+@import url(assets/css/layouts/menu-right/ui.menu-right.css);
+@import url(assets/css/layouts/footer/ui.footer.css);
+
+
+@import '~ng-easyui/themes/material/easyui.css';
+@import '~ng-easyui/themes/angular.css';
+@import '~ng-easyui/themes/icon.css';
+
+.qm-theme-color {
+   color: white;
+}
+
+.qm-color {
+   color: #f99b1c;
+}
+
+.fc-primary {
+   color: #1f9dfe;
+}
+
+.fc-success {
+   color: #46be8a;
+}
+
+.fc-warning {
+   color: #f5a751;
+}
+
+.fc-danger {
+   color: #fb434a;
+}
+
+.red-color{
+   color: red !important;
+}
+
+.chart {height: 500px;}
+#analysisBox {margin-top:0 !important;padding-left:0;padding-right:0;}
+#analysisBox .nav-tabs li a.nav-link.active {background:#f99b1c !important; }
+#analysisBox .mt-5 {padding:15px;background:#fff;height:100%;overflow:hidden;margin-top:15px !important;box-shadow:0 0 3px #ccc;}
+table tr th {font-weight: normal;font-size: 1.1rem;vertical-align:middle;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;}
+td {vertical-align:middle;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;}
+
+
+@media screen and (min-width: 768px) {
+   .max-width-lg {
+      max-width: 1200px;
+   }
+   .max-width-sm{
+      max-width: 300px;
+   }
+}
+@media screen and (min-width: 1366px) {
+   .max-width-lg {
+      max-width: 1200px;
+   }
+   .max-width-sm{
+      max-width: 400px;
+   }
+}
+@media screen and (min-width: 1980px) {
+   .max-width-lg {
+      max-width: 1400px;
+   }
+   .max-width-sm{
+      max-width: 400px;
+   }
+}
+

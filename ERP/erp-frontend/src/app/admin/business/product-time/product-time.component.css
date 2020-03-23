@@ -1,0 +1,28 @@
+.card-header {padding-left:0;padding-right:0;}
+tbody{
+   font-size: 0.6rem;
+}
+
+.form-label{
+   margin-bottom:6px;margin-left: 50px;
+}
+.form-label label{
+   text-align: right;
+   margin-right: 10px;
+}
+.error{
+   color: red;
+   font-size: 12px;
+   margin: 4px 0;
+}
+.del-info{
+   color: red;
+}
+.cleaner{
+   background: 0 0;
+   border: 0;
+   font-size: 1.5rem;
+   -webkit-appearance: none;
+}
+
+

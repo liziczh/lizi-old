@@ -1,0 +1,137 @@
+<nav class="cat__menu-left">
+    <div class="cat__menu-left__lock cat__menu-left__action--menu-toggle" (click)="menuVisible()">
+        <div class="cat__menu-left__pin-button">
+            <div><!-- --></div>
+        </div>
+    </div>
+    <div class="cat__menu-left__logo">
+        <a [routerLink]="['dashboard']"><img src="assets/images/logo-inverse.png"/></a>
+    </div>
+    <div class="cat__menu-left__inner">
+        <ul class="cat__menu-left__list cat__menu-left__list--root">
+            <li class="cat__menu-left__item cat__menu-left__submenu"
+                [routerLinkActive]="['cat__menu-left__item--active']">
+                <a href="javascript:;">
+                    <span class="cat__menu-left__icon icmn-list"></span>
+                    基础资料
+                </a>
+                <ul class="cat__menu-left__list">
+                    <li class="cat__menu-left__item">
+                        <a [routerLink]="['info/supplier']">
+                            <span class="cat__menu-left__icon"></span>供应商
+                        </a>
+                    </li>
+                    <li class="cat__menu-left__item">
+                        <a [routerLink]="['info/customer']">
+                            <span class="cat__menu-left__icon"></span>客户
+                        </a>
+                    </li>
+                    <li class="cat__menu-left__item">
+                        <a [routerLink]="['info/store']">
+                            <span class="cat__menu-left__icon"></span>门店
+                        </a>
+                    </li>
+                    <li class="cat__menu-left__item">
+                        <a [routerLink]="['info/warehouse']">
+                            <span class="cat__menu-left__icon"></span>仓库
+                        </a>
+                    </li>
+                    <li class="cat__menu-left__item">
+                        <a [routerLink]="['info/product']">
+                            <span class="cat__menu-left__icon"></span>商品
+                        </a>
+                    </li>
+                </ul>
+            </li>
+            <li class="cat__menu-left__item cat__menu-left__submenu"
+                [routerLinkActive]="['cat__menu-left__item--active']">
+                <a href="javascript:;">
+                    <span class="cat__menu-left__icon icmn-codepen"></span>
+                    进销存
+                </a>
+                <ul class="cat__menu-left__list">
+                    <li *ngIf="user.role.code === 'admin' || user.role.code === 'purchase' || user.role.code === 'stock'" class="cat__menu-left__item">
+                        <a [routerLink]="['psi/purchase']">
+                            <span class="cat__menu-left__icon"></span>采购
+                        </a>
+                    </li>
+                    <li *ngIf="user.role.code === 'admin' || user.role.code === 'sale' || user.role.code === 'stock'" class="cat__menu-left__item">
+                        <a [routerLink]="['psi/sale']">
+                            <span class="cat__menu-left__icon"></span>销售
+                        </a>
+                    </li>
+                    <li class="cat__menu-left__item">
+                        <a [routerLink]="['psi/stock']">
+                            <span class="cat__menu-left__icon"></span>库存
+                        </a>
+                    </li>
+                </ul>
+            </li>
+            <li *ngIf="user.role.code === 'admin'" class="cat__menu-left__item cat__menu-left__submenu"
+                [routerLinkActive]="['cat__menu-left__item--active']">
+                <a href="javascript:;">
+                    <span class="cat__menu-left__icon icmn-users"></span>
+                    用户管理
+                </a>
+                <ul class="cat__menu-left__list">
+                    <li class="cat__menu-left__item">
+                        <a [routerLink]="['user/user']">
+                            <span class="cat__menu-left__icon"></span>用户管理
+                        </a>
+                    </li>
+                </ul>
+            </li>
+            <!--新菜单-->
+            <!--<li class="cat__menu-left__item" [routerLinkActive]="['cat__menu-left__item&#45;&#45;active']">-->
+                <!--<a [routerLink]="['info/supplier']">-->
+                    <!--<span class="cat__menu-left__icon"></span>供应商-->
+                <!--</a>-->
+            <!--</li>-->
+            <!--<li class="cat__menu-left__item" [routerLinkActive]="['cat__menu-left__item&#45;&#45;active']">-->
+                <!--<a [routerLink]="['info/customer']">-->
+                    <!--<span class="cat__menu-left__icon"></span>客户-->
+                <!--</a>-->
+            <!--</li>-->
+            <!--<li class="cat__menu-left__item" [routerLinkActive]="['cat__menu-left__item&#45;&#45;active']">-->
+                <!--<a [routerLink]="['info/store']">-->
+                    <!--<span class="cat__menu-left__icon"></span>门店-->
+                <!--</a>-->
+            <!--</li>-->
+            <!--<li class="cat__menu-left__item" [routerLinkActive]="['cat__menu-left__item&#45;&#45;active']">-->
+                <!--<a [routerLink]="['info/warehouse']">-->
+                    <!--<span class="cat__menu-left__icon"></span>仓库-->
+                <!--</a>-->
+            <!--</li>-->
+            <!--<li class="cat__menu-left__item" [routerLinkActive]="['cat__menu-left__item&#45;&#45;active']">-->
+                <!--<a [routerLink]="['info/product']">-->
+                    <!--<span class="cat__menu-left__icon"></span>商品-->
+                <!--</a>-->
+            <!--</li>-->
+            <!--<li class="cat__menu-left__item" [routerLinkActive]="['cat__menu-left__item&#45;&#45;active']">-->
+                <!--<a [routerLink]="['psi/purchase']">-->
+                    <!--<span class="cat__menu-left__icon"></span>采购-->
+                <!--</a>-->
+            <!--</li>-->
+            <!--<li class="cat__menu-left__item" [routerLinkActive]="['cat__menu-left__item&#45;&#45;active']">-->
+                <!--<a [routerLink]="['psi/sale']">-->
+                    <!--<span class="cat__menu-left__icon"></span>销售-->
+                <!--</a>-->
+            <!--</li>-->
+            <!--<li class="cat__menu-left__item" [routerLinkActive]="['cat__menu-left__item&#45;&#45;active']">-->
+                <!--<a [routerLink]="['psi/stock']">-->
+                    <!--<span class="cat__menu-left__icon"></span>库存-->
+                <!--</a>-->
+            <!--</li>-->
+            <!--<li class="cat__menu-left__item" [routerLinkActive]="['cat__menu-left__item&#45;&#45;active']">-->
+                <!--<a [routerLink]="['user/user']">-->
+                    <!--<span class="cat__menu-left__icon"></span>用户-->
+                <!--</a>-->
+            <!--</li>-->
+            <li class="cat__menu-left__item cat__menu-left__item--disabled">
+                <a href="javascript:;" (click)="logout()">
+                    <span class="cat__menu-left__icon"></span>退出
+                </a>
+            </li>
+        </ul>
+    </div>
+</nav>

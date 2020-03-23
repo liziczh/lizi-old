@@ -1,0 +1,263 @@
+<section class="card" xmlns="http://www.w3.org/1999/html" style="background:none;border:0;">
+    <!--页面头部-->
+    <div class="card-header" style="background:none;border:0;">
+        <div class="col-md-4  pull-right mt-2">
+            <div class="form-group pull-right">
+
+            </div>
+        </div>
+        <span class="cat__core__title"><strong>销售</strong></span>
+        <small class="text-muted"></small>
+    </div>
+    <!--页面主体-->
+    <div class="mt-3" id="analysisBox">
+        <div class="mt-5">
+            <div style="margin-bottom:8px; height: 30px;">
+                <!--顶部按钮-->
+                <eui-linkbutton *ngIf="user.role.code === 'admin' || user.role.code === 'sale'" iconCls="icon-add" (click)="openSaleOutStock(SALE_OUT_STOCK_TEMPLATE)">销售出库
+                </eui-linkbutton>
+                <eui-linkbutton style="float: right" iconCls="icon-search" (click)="initSaleRecordList()">查询
+                </eui-linkbutton>
+                <eui-datebox style="float: right" [(ngModel)]="endTime" format="yyyy-MM-dd" [editable]="false"></eui-datebox>
+                <div style="float: right">&nbsp;-&nbsp;</div>
+                <eui-datebox style="float: right" [(ngModel)]="startTime" format="yyyy-MM-dd" [editable]="false"></eui-datebox>
+            </div>
+            <!--数据表格-->
+
+            <eui-datagrid
+                    [pagination]="true"
+                    [lazy]="true"
+                    [data]="saleRecordList"
+                    [total]="totalSize"
+                    [pageNumber]="pageNum"
+                    [pageSize]="limit"
+                    [loading]="loading"
+                    style="height: 100%;clear: both;"
+                    (pageChange)="onPageChange($event)">
+                <eui-grid-column title="编号" align="center" cellCss="datagrid-td-rownumber" width="5%">
+                    <ng-template euiCellTemplate let-rowIndex="rowIndex" class="font-size-6">
+                        <div class="item font-size-6">{{rowIndex + 1}}</div>
+                    </ng-template>
+                </eui-grid-column>
+                <eui-grid-column field="date" title="记录时间" align="left" width="12%">
+                    <ng-template euiCellTemplate let-row>
+                        <div class="item font-size-6">
+                            <div [title]="row.date | date: 'yyyy-MM-dd hh:mm:ss'">{{row.date | date: 'yyyy-MM-dd hh:mm:ss'}}</div>
+                        </div>
+                    </ng-template>
+                </eui-grid-column>
+                <eui-grid-column field="product" title="商品" align="left" width="12%">
+                    <ng-template euiCellTemplate let-row>
+                        <div class="item font-size-6">
+                            <div [title]="row.product.name">{{row.product.name}}</div>
+                        </div>
+                    </ng-template>
+                </eui-grid-column>
+                <eui-grid-column field="salePrice" title="商品销售价" align="left" width="12%">
+                    <ng-template euiCellTemplate let-row>
+                        <div class="item font-size-6">
+                            <div [title]="row.salePrice">{{row.salePrice}}</div>
+                        </div>
+                    </ng-template>
+                </eui-grid-column>
+                <eui-grid-column field="count" title="商品数量" align="left" width="12%">
+                    <ng-template euiCellTemplate let-row>
+                        <div class="item font-size-6">
+                            <div [title]="row.count">{{row.count}}</div>
+                        </div>
+                    </ng-template>
+                </eui-grid-column>
+                <eui-grid-column field="customer" title="客户" align="left" width="8%">
+                    <ng-template euiCellTemplate let-row>
+                        <div class="item font-size-6">
+                            <div [title]="row.customer.name">{{row.customer.name}}</div>
+                        </div>
+                    </ng-template>
+                </eui-grid-column>
+                <eui-grid-column field="warehouse" title="仓库" align="left" width="8%">
+                    <ng-template euiCellTemplate let-row>
+                        <div class="item font-size-6">
+                            <div [title]="row.warehouse.name">{{row.warehouse.name}}</div>
+                        </div>
+                    </ng-template>
+                </eui-grid-column>
+                <eui-grid-column field="store" title="门店" align="left" width="8%">
+                    <ng-template euiCellTemplate let-row>
+                        <div class="item font-size-6">
+                            <div [title]="row.store.name">{{row.store.name}}</div>
+                        </div>
+                    </ng-template>
+                </eui-grid-column>
+                <eui-grid-column field="type" title="记录类型" align="left" width="6%">
+                    <ng-template euiCellTemplate let-row>
+                        <div class="item font-size-6">
+                            <div *ngIf="row.type == '销售出库'" [title]="row.type">{{row.type}}</div>
+                            <div *ngIf="row.type == '销售退货'" class="error" [title]="row.type">{{row.type}}</div>
+                        </div>
+                    </ng-template>
+                </eui-grid-column>
+
+                <eui-grid-column *ngIf="user.role.code === 'admin' || user.role.code === 'sale'" title="操作" align="center" width="6%">
+                    <ng-template euiCellTemplate let-row>
+                        <div class="item">
+                            <a title="查看详情" (click)="openSaleRecordDetail(SALE_RECORD_DETAIL_TEMPLATE, row)"
+                               class="mr-1" href="javascript: void(0);"><i class="icmn-eye-plus"></i></a>
+                            <a *ngIf="row.type !== '销售退货'" title="销售退货"
+                               (click)="openSaleRefund(SALE_REFUND_TEMPLATE, row)"
+                               class="mr-1" href="javascript: void(0);"><i class="icmn-cross"></i></a>
+                        </div>
+                    </ng-template>
+                </eui-grid-column>
+            </eui-datagrid>
+        </div>
+    </div>
+
+</section>
+
+<!--销售出库模板-->
+<ng-template #SALE_OUT_STOCK_TEMPLATE>
+    <div class="modal-header">
+        <h5 class="modal-title">{{'销售出库'}}</h5>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide();">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <form novalidate [formGroup]="saleForm">
+            <div class="form-label">
+                <label [for]="customer" align="left" class="desc-label">客户<span class="red-color">*</span></label>
+                <eui-combobox #customer style="width: 60%;" formControlName="customerId" [editable]="false"
+                              [data]="customerList" [valueField]="'id'" [textField]="'name'"></eui-combobox>
+                <label class="error" *ngIf="saleForm.get('customerId').hasError('required')">请选择客户</label>
+            </div>
+            <div class="form-label">
+                <label [for]="product" align="left" class="desc-label">商品<span class="red-color">*</span></label>
+                <eui-combobox #product style="width: 60%;" formControlName="productId" [editable]="false"
+                              [data]="productList" [valueField]="'id'" [textField]="'name'"
+                (valueChange)="onProductChange($event)"></eui-combobox>
+                <label class="error" *ngIf="saleForm.get('productId').hasError('required')">请选择商品</label>
+            </div>
+            <div *ngIf="warehouseList.length !== 0" class="form-label">
+                <label [for]="warehouse" align="left" class="desc-label">仓库<span class="red-color">*</span></label>
+                <eui-combobox #warehouse style="width: 60%;" formControlName="warehouseId" [editable]="false"
+                              [data]="warehouseList" [valueField]="'id'" [textField]="'name'"></eui-combobox>
+                <label class="error" *ngIf="saleForm.get('warehouseId').hasError('required')">请选择仓库</label>
+            </div>
+            <div class="form-label">
+                <label [for]="count" align="left" class="desc-label">商品数量<span class="red-color">*</span></label>
+                <eui-textbox #count maxlength="20" style="width: 60%;" formControlName="count" pattern="^[0-9]*$"
+                             placeholder="请输入商品数量"></eui-textbox>
+                <label class="error" *ngIf="saleForm.get('count').hasError('required')">请输入产品数量</label>
+                <label class="error" *ngIf="saleForm.get('count').hasError('pattern')">请输入数字</label>
+            </div>
+            <div class="form-label">
+                <label [for]="salePrice" align="left" class="desc-label">商品销售价<span
+                        class="red-color">*</span></label>
+                <eui-textbox #salePrice maxlength="20" style="width: 60%;" formControlName="salePrice" pattern="^[0-9]+(.[0-9]{2})?$"
+                             placeholder="请输入商品销售价"></eui-textbox>
+                <label class="error" *ngIf="saleForm.get('salePrice').hasError('required')">请输入商品销售价</label>
+                <label class="error" *ngIf="saleForm.get('salePrice').hasError('pattern')">请输入价格</label>
+            </div>
+            <div class="form-label">
+                <label [for]="store" align="left" class="desc-label">门店<span class="red-color">*</span></label>
+                <eui-combobox #store style="width: 60%;" formControlName="storeId" [editable]="false"
+                              [data]="storeList" [valueField]="'id'" [textField]="'name'"></eui-combobox>
+                <label class="error" *ngIf="saleForm.get('storeId').hasError('required')">请选择门店</label>
+            </div>
+            <div class="form-label">
+                <label [for]="memo" align="left" class="desc-label">备注</label>
+                <textarea #memo class="form-control" formControlName="memo" maxlength="400" rows="5"
+                          style="width: 60%;display: inline-block;padding: 4px;" placeholder="请输入备注"></textarea>
+                <label class="error" *ngIf="saleForm.get('memo').hasError('maxlength')"
+                       style="vertical-align: top;">100字以内</label>
+            </div>
+        </form>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn  btn-outline-success mr-2 mb-2 btn-sm"
+                (click)="submitSaleOutStock()">
+            提交
+        </button>
+        <button type="button" class="btn  btn-dark mr-2 mb-2 btn-sm" (click)="modalRef.hide();">关闭</button>
+    </div>
+</ng-template>
+
+<!--查看销售记录详情模板-->
+<ng-template #SALE_RECORD_DETAIL_TEMPLATE>
+    <div class="modal-header">
+        <h5 class="modal-title">{{'销售记录详情'}}</h5>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <form novalidate [formGroup]="saleDetailForm">
+            <div class="form-label">
+                <label [for]="customer" align="left" class="desc-label">客户<span class="red-color">*</span></label>
+                <eui-textbox #customer style="width: 60%;" formControlName="customer" readonly="true"></eui-textbox>
+            </div>
+            <div class="form-label">
+                <label [for]="product" align="left" class="desc-label">商品<span class="red-color">*</span></label>
+                <eui-textbox #product style="width: 60%;" formControlName="product" readonly="true"></eui-textbox>
+            </div>
+            <div class="form-label">
+                <label [for]="count" align="left" class="desc-label">商品数量<span class="red-color">*</span></label>
+                <eui-textbox #count maxlength="20" style="width: 60%;" formControlName="count"
+                             readonly="true"></eui-textbox>
+            </div>
+            <div class="form-label">
+                <label [for]="salePrice" align="left" class="desc-label">商品销售价<span
+                        class="red-color">*</span></label>
+                <eui-textbox #salePrice style="width: 60%;" formControlName="salePrice" readonly="true"></eui-textbox>
+            </div>
+            <div class="form-label">
+                <label [for]="warehouse" align="left" class="desc-label">仓库<span class="red-color">*</span></label>
+                <eui-textbox #warehouse style="width: 60%;" formControlName="warehouse" readonly="true"></eui-textbox>
+            </div>
+            <div class="form-label">
+                <label [for]="store" align="left" class="desc-label">门店<span class="red-color">*</span></label>
+                <eui-textbox #store style="width: 60%;" formControlName="store" readonly="true"></eui-textbox>
+            </div>
+            <div class="form-label">
+                <label [for]="type" align="left" class="desc-label">类型<span class="red-color">*</span></label>
+                <eui-textbox #type style="width: 60%;" formControlName="type" readonly="true"></eui-textbox>
+            </div>
+            <div class="form-label">
+                <label [for]="memo" align="left" class="desc-label">备注</label>
+                <textarea #memo class="form-control" formControlName="memo" maxlength="400" rows="5"
+                          style="width: 60%;display: inline-block;padding: 4px;" readonly="true"></textarea>
+            </div>
+        </form>
+    </div>
+    <div class="modal-footer">
+        <button *ngIf="saleDetailForm.value.type === 'in'" type="button"
+                class="btn  btn-outline-success mr-2 mb-2 btn-sm"
+                (click)="modalRef.hide();openSaleRefund(SALE_REFUND_TEMPLATE, saleDetailForm)">
+            退货
+        </button>
+        <button type="button" class="btn  btn-dark mr-2 mb-2 btn-sm" (click)="modalRef.hide()">关闭</button>
+    </div>
+</ng-template>
+
+<!--销售退货-->
+<ng-template #SALE_REFUND_TEMPLATE>
+    <div class="modal-header">
+        <h5 class="modal-title">销售退货</h5>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <h5 class="modal-body">
+            您确定要退回<span class="error">{{refundSaleRecord.product.name}}×{{refundSaleRecord.count}}</span>吗？
+        </h5>
+    </div>
+    <div class="modal-footer">
+        <button class="btn  btn-outline-success mr-2 mb-2 btn-sm" (click)="submitSaleRefund()"
+                type="button">确定
+        </button>
+        <button class="btn  btn-dark mr-2 mb-2 btn-sm" (click)="modalRef.hide()"
+                type="button">关闭
+        </button>
+    </div>
+</ng-template>

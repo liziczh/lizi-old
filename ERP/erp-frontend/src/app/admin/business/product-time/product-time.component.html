@@ -1,0 +1,190 @@
+<section class="card" xmlns="http://www.w3.org/1999/html" style="background:none;border:0;">
+   <!--页面头部-->
+   <div class="card-header" style="background:none;border:0;">
+      <div class="col-md-4  pull-right mt-2">
+         <div class="form-group pull-right">
+
+         </div>
+      </div>
+      <span class="cat__core__title"><strong>产品时间限制</strong></span>
+      <small class="text-muted"></small>
+   </div>
+   <!--页面主体-->
+   <div class="mt-3" id="analysisBox">
+      <div class="mt-5">
+         <div style="margin-bottom:8px">
+            <!--顶部按钮-->
+            <eui-linkbutton iconCls="icon-add" (click)="openAddProductTime(ADD_PRODUCT_TIME_TEMPLATE)">添加
+            </eui-linkbutton>
+         </div>
+         <!--数据表格-->
+         <eui-datagrid
+            [data]="productTimeList"
+            [lazy]="true"
+            [loading]="loading"
+            style="height: 100%;">
+            <eui-grid-column title="编号" align="center" cellCss="datagrid-td-rownumber" width="5%">
+               <ng-template euiCellTemplate let-rowIndex="rowIndex" class="font-size-6">
+                  <div class="item font-size-6">{{rowIndex + 1}}</div>
+               </ng-template>
+            </eui-grid-column>
+            <eui-grid-column field="productName" title="产品名称" align="left" width="15%">
+               <ng-template euiCellTemplate let-row>
+                  <div class="item font-size-6">
+                     <div [title]="row.productName">{{row.productName}}</div>
+                  </div>
+               </ng-template>
+            </eui-grid-column>
+            <eui-grid-column field="productCode" title="产品CODE" align="left" width="15%">
+               <ng-template euiCellTemplate let-row>
+                  <div class="item font-size-6">
+                     <div [title]="row.productCode">{{row.productCode}}</div>
+                  </div>
+               </ng-template>
+            </eui-grid-column>
+            <eui-grid-column field="startTime" title="开始时间" align="left" width="17%">
+               <ng-template euiCellTemplate let-row>
+                  <div class="item font-size-6">
+                     <div [title]="row.startTime">{{row.startTime}}</div>
+                  </div>
+               </ng-template>
+            </eui-grid-column>
+            <eui-grid-column field="endTime" title="结束时间" align="left" width="17%">
+               <ng-template euiCellTemplate let-row>
+                  <div class="item font-size-6">
+                     <div [title]="row.endTime">{{row.endTime}}</div>
+                  </div>
+               </ng-template>
+            </eui-grid-column>
+            <eui-grid-column field="manager" title="产品负责人" align="left" width="17%">
+               <ng-template euiCellTemplate let-row>
+                  <div class="item font-size-6">
+                     <div [title]="row.manager">{{row.manager}}</div>
+                  </div>
+               </ng-template>
+            </eui-grid-column>
+            <eui-grid-column title="操作" align="center" width="6%">
+               <ng-template euiCellTemplate let-row>
+                  <div class="item">
+                     <a title="编辑" (click)="openEditProductTime(row,EDIT_PRODUCT_TIME_TEMPLATE)"
+                        class="mr-1" href="javascript: void(0);"><i class="icmn-pencil2"></i></a>
+                     <a title="移除" (click)="openDeleteProductTime(row,DELETE_PRODUCT_TIME_TEMPLATE)"
+                        class="mr-1" href="javascript: void(0);"><i class="icmn-bin"></i></a>
+                  </div>
+               </ng-template>
+            </eui-grid-column>
+         </eui-datagrid>
+      </div>
+   </div>
+
+</section>
+
+<!--添加产品时间模板-->
+<ng-template #ADD_PRODUCT_TIME_TEMPLATE>
+   <!--模态框头部-->
+   <div class="modal-header">
+      <!--模态框标题-->
+      <h5 class="modal-title">添加产品时间限制</h5>
+      <!--模态框 ×（关闭）-->
+      <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+         <span aria-hidden="true">&times;</span>
+      </button>
+   </div>
+   <!--模态框主体-->
+   <div class="modal-body">
+      <form novalidate [formGroup]="productTime">
+         <div class="form-label">
+            <label [for]="productList">产品选择：</label>
+            <eui-combobox #productList formControlName="productId" valueField="id" textField="name" [editable]="false"
+                          [data]="noTimeLimitProductList"></eui-combobox>
+         </div>
+         <div class="form-label">
+            <label [for]="startTime">开始时间：</label>
+            <eui-datebox #startTime formControlName="startTime" format="yyyy-MM-dd" [editable]="false"></eui-datebox>
+            <label class="error" *ngIf="productTime.get('startTime').hasError('required')">StartTime is
+               required.</label>
+         </div>
+         <div class="form-label">
+            <label [for]="endTime">结束时间：</label>
+            <eui-datebox #endTime formControlName="endTime" format="yyyy-MM-dd" [editable]="false"></eui-datebox>
+            <label class="error" *ngIf="productTime.get('endTime').hasError('required')">EndTime is required.</label>
+         </div>
+         <div class="form-label">
+            <label [for]="manager">负责人：</label>
+            <eui-textbox #manager type="email" formControlName="manager"
+                         pattern="^[a-z0-9]+(\.[_a-z0-9]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,15})$"></eui-textbox>
+            <label class="error" *ngIf="productTime.get('manager').hasError('email')">Email is invaild.</label>
+         </div>
+      </form>
+   </div>
+   <!--模态框底部-->
+   <div class="modal-footer">
+      <button (click)="submitAddProductTime(productTime.value)" [disabled]="productTime.invalid"
+              class="btn  btn-outline-success mr-2 mb-2 btn-sm">保存
+      </button>
+      <button (click)="modalRef.hide()" class="btn  btn-dark mr-2 mb-2 btn-sm">取消</button>
+   </div>
+</ng-template>
+<!--编辑产品时间模板-->
+<ng-template #EDIT_PRODUCT_TIME_TEMPLATE>
+   <!--模态框头部-->
+   <div class="modal-header">
+      <!--模态框标题-->
+      <h5 class="modal-title">产品时间限制</h5>
+      <!--模态框 ×（关闭）-->
+      <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+         <span aria-hidden="true">&times;</span>
+      </button>
+   </div>
+   <!--模态框主体-->
+   <div class="modal-body">
+      <form novalidate [formGroup]="productTime">
+         <div class="form-label">
+            <label [for]="startTime">开始时间：</label>
+            <eui-datebox #startTime formControlName="startTime" format="yyyy-MM-dd" [editable]="false"></eui-datebox>
+            <label class="error" *ngIf="productTime.get('startTime').hasError('required')">Required.</label>
+         </div>
+         <div class="form-label">
+            <label [for]="endTime">结束时间：</label>
+            <eui-datebox #endTime formControlName="endTime" format="yyyy-MM-dd" [editable]="false"></eui-datebox>
+            <label class="error" *ngIf="productTime.get('endTime').hasError('required')">Required.</label>
+         </div>
+         <div class="form-label">
+            <label [for]="manager">负责人：</label>
+            <eui-textbox #manager type="email" formControlName="manager"
+                         pattern="^[a-z0-9]+(\.[_a-z0-9]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,15})$"></eui-textbox>
+            <label class="error" *ngIf="productTime.get('manager').hasError('email')">Invaild.</label>
+         </div>
+      </form>
+   </div>
+   <!--模态框底部-->
+   <div class="modal-footer">
+      <button (click)="submitEditProductTime(productTime.value)" [disabled]="productTime.invalid"
+              class="btn  btn-outline-success mr-2 mb-2 btn-sm">保存
+      </button>
+      <button (click)="modalRef.hide()" class="btn  btn-dark mr-2 mb-2 btn-sm">取消</button>
+   </div>
+</ng-template>
+<!--删除产品时间模板-->
+<ng-template #DELETE_PRODUCT_TIME_TEMPLATE>
+   <div class="modal-header">
+      <h5 class="modal-title">删除产品时间限制</h5>
+
+      <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+         <span aria-hidden="true">&times;</span>
+      </button>
+   </div>
+   <div class="modal-body">
+      <h5 class="modal-body">
+         您确定要删除<span class="del-info">{{deletedProductTime.productName}}</span>的产品时间限制吗？
+      </h5>
+   </div>
+   <div class="modal-footer">
+      <button class="btn  btn-outline-success mr-2 mb-2 btn-sm" (click)="singleDeleteProductTime(deletedProductTime)"
+              type="button">确定
+      </button>
+      <button class="btn  btn-dark mr-2 mb-2 btn-sm" (click)="modalRef.hide()"
+              type="button">关闭
+      </button>
+   </div>
+</ng-template>

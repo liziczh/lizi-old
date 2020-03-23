@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.group3.bookstore.mapper.CommodityManagerMapper">
+
+    <!--按书名查询书籍信息-->
+    <select id="selectCommodityByCommodityName" parameterType="string" resultType="commodity">
+        select * from commodity where commodityName = #{commodityName}
+    </select>
+    <!--编辑书籍信息-->
+    <update id="updateCommodity" parameterType="commodity">
+        update commodity set commodityName = #{commodityName},
+        commodityDescription = #{commodityDescription},
+        commodityImg = #{commodityImg},
+        categoryId = #{categoryId},
+        commodityIntroduction = #{commodityIntroduction},
+        commodityContents = #{commodityContents},
+        commodityPrice = #{commodityPrice},
+        commodityPurchasePrice = #{commodityPurchasePrice},
+        authorName = #{authorName},
+        publishHouse = #{publishHouse},
+        publishDate = #{publishDate},
+        commodityCount = commodityCount + #{commodityCount}
+
+    </update>
+    <!--进货书籍-->
+    <insert id="addCommodity" parameterType="commodity">
+        insert into commodity values(#{commodityId},#{commodityName},#{commodityDescription},#{commodityImg},#{categoryId},#{commodityIntroduction},#{commodityContents},#{commodityPrice},#{commodityPurchasePrice},#{authorName},#{publishHouse},#{publishDate},#{commodityCount},0,0,0)
+    </insert>
+    <!--根据书籍名称删除书籍-->
+    <delete id="deleleCommodityByCommodityName" parameterType="string">
+        delete from commodity where commodityName = #{commodityName}
+    </delete>
+    <!--选出正在参与限时抢购活动的书籍-->
+    <select id="getCommodityByCommodityPurchase" resultType="commodity">
+        select * from commodity where 'commodityPurchasePrice' is not null;
+    </select>
+    <!--展示数据库中所有的书籍-->
+    <select id="selectAllCommodity" resultType="commodity">
+        select * from commodity
+    </select>
+</mapper>

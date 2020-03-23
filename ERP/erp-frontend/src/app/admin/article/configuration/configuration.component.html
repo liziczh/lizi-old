@@ -1,0 +1,56 @@
+<section class="card" xmlns="http://www.w3.org/1999/html" style="background:none;border:0;">
+   <div class="card-header" style="background:none;border:0;">
+      <div class="col-md-4  pull-right mt-2">
+         <div class="form-group pull-right">
+
+         </div>
+      </div>
+      <span class="cat__core__title"><strong>新官网配置</strong></span>
+      <small class="text-muted"></small>
+
+   </div>
+   <div class="mt-3" id="analysisBox">
+      <div class="mt-5">
+
+         <h5 class="text-black"><strong>轮播图设置（中文版）</strong></h5>
+         <div class="clearfix"></div>
+         <div class="row">
+            <div class="col-lg-12 pt-5">
+               <div class="col-lg-3 pull-left" *ngFor="let pic of slideshow_zh;let i = index">
+                  <input type="file" class="dropify" [id]="pic.code" #bigImg data-allowed-file-extensions="png jpg"
+                         style="width: 100%;"
+
+                  />
+                  <p style="text-align: center;"><strong>图{{(i+1)}}</strong></p>
+                  <p style="text-align: center;">
+                     <button (click)="uploadSlideshowPic(pic.code)">上传</button>
+                  </p>
+
+               </div>
+            </div>
+         </div>
+      </div>
+      <div class="mt-5">
+
+         <h5 class="text-black"><strong>轮播图设置（英文版）</strong></h5>
+         <div class="clearfix"></div>
+         <div class="row">
+            <div class="col-lg-12 pt-5">
+               <div class="col-lg-3 pull-left" *ngFor="let pic of slideshow_en;let i = index">
+                  <input type="file" class="dropify" [id]="pic.code" data-default-file=""
+                         data-allowed-file-extensions="png jpg"
+                         style="width: 100%;"
+
+                  />
+                  <p style="text-align: center;"><strong>图{{(i+1)}}</strong></p>
+                  <p style="text-align: center;">
+                     <button (click)="uploadSlideshowPic(pic.code)">上传</button>
+                  </p>
+
+               </div>
+
+            </div>
+         </div>
+      </div>
+   </div>
+</section>
