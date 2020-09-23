@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lizi.company.dao.SubCompanyMapper">
+
+    <resultMap id="subCompanyMap" type="SubCompany">
+        <id property="subComId" column="SUBCOMID"></id>
+        <result property="subComNo" column="SUBCOMNO"></result>
+        <result property="subComName" column="SUBCOMNAME"></result>
+        <result property="comId" column="COMID"></result>
+    </resultMap>
+
+    <select id="getSubCompanyListByComId" parameterType="int" resultMap="subCompanyMap">
+        select * from subcompany where COMID = #{comId}
+    </select>
+
+</mapper>

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lizi.company.dao.CompanyMapper">
+    
+    <resultMap id="companyMap" type="Company">
+        <id property="comId" column="COMID"></id>
+        <result property="comNo" column="COMNO"></result>
+        <result property="comName" column="COMNAME"></result>
+    </resultMap>
+    
+    <select id="getCompanyList" resultMap="companyMap">
+        select * from company
+    </select>
+
+</mapper>
