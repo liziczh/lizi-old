@@ -33,7 +33,7 @@
       "dropify": "^0.2.2",
       "echarts": "^3.8.5",
       "html5-form-validation": "^1.5.3",
-      "jquery": "^3.2.1",
+      "jquery": "^3.5.0",
       "jscrollpane": "^2.0.22",
       "ng-easyui": "^1.2.0",
       "ng2-select2": "^1.0.0-beta.10",
