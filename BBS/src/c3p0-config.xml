@@ -3,7 +3,7 @@
 	<!-- 默认配置，当使用ComboPooledDataSource无参构造器时，使用的就是这个配置 -->
 	<default-config>
 		<!-- 基本配置 -->
-		<property name="jdbcUrl">jdbc:mysql://47.93.251.190:3306/bbs?useUnicode=true&amp;characterEncoding=utf8&amp;useSSL=false&amp;serverTimezone=UTC</property>
+		<property name="jdbcUrl">jdbc:mysql://localhost:3306/bbs?useUnicode=true&amp;characterEncoding=utf8&amp;useSSL=false&amp;serverTimezone=UTC</property>
 		<property name="driverClass">com.mysql.jdbc.Driver</property>
 		<property name="user">root</property>
 		<property name="password">123456</property>
@@ -18,7 +18,7 @@
 	</default-config>
 	<!-- 命名配置，new ComboPooledDataSource("oralce-config")时，使用的就是这个配置 -->
 	<named-config name="mysql-config">
-		<property name="jdbcUrl">jdbc:mysql://47.93.251.190:3306/bbs?useUnicode=true&amp;characterEncoding=utf8&amp;useSSL=false&amp;serverTimezone=UTC</property>
+		<property name="jdbcUrl">jdbc:mysql://localhost:3306/bbs?useUnicode=true&amp;characterEncoding=utf8&amp;useSSL=false&amp;serverTimezone=UTC</property>
 		<property name="driverClass">com.mysql.jdbc.Driver</property>
 		<property name="user">root</property>
 		<property name="password">123456</property>
